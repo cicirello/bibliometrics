@@ -27,10 +27,9 @@
 
 import unittest
 
-# Your module imported assuming working directory
-# is root of repository. See workflow in repository
-# for example running of test cases.
-import entrypoint as ep
+import sys
+sys.path.insert(0,'src')
+import bibliometrics as bib
 
 class TestSomething(unittest.TestCase) :
 
