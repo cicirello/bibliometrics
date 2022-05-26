@@ -33,11 +33,15 @@ import bibliometrics as bib
 
 class TestSomething(unittest.TestCase) :
 
-    def test_sometestcase(self) :
-        # Unit test cases would go in these
-        # test methods to test the various
-        # Python functions, methods, etc.
-        pass
+    def test_parse(self) :
+        with open("tests/testcase.html.txt", "r") as f :
+            page = f.read().replace('\n', '')
+            metrics = bib.parseBibliometrics(page)
+            self.assertEqual("2052", metrics["total"])
+            self.assertEqual("364", metrics["fiveYear"])
+            self.assertEqual("25", metrics["h"])
+            self.assertEqual("33", metrics["i10"])
+            print(metrics)
 
     def test_anothertestcase(self) :
         pass

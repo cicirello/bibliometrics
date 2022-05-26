@@ -28,6 +28,67 @@
 
 import sys
 
+def parseBibliometrics(page) :
+    """Parses a Scholar Profile for the bibliometrics.
+
+    Keyword arguments:
+    page - The user profile page
+    """
+    metrics = {}
+    i = page.find("</td>")
+    if i < 0 :
+        return metrics
+    i += 5
+    endStat = page.find("</td>", i)
+    if endStat < 0 :
+        return metrics
+    startStat = page.rfind(">", i, endStat)
+    if startStat < 0 :
+        return metrics
+    totalCitations = page[startStat+1:endStat]
+    metrics["total"] = totalCitations.strip()
+    i = endStat + 6
+    endStat = page.find("</td>", i)
+    if endStat < 0 :
+        return metrics
+    i += 5
+    startStat = page.rfind(">", i, endStat)
+    if startStat < 0 :
+        return metrics
+    fiveYearCitations = page[startStat+1:endStat]
+    metrics["fiveYear"] = fiveYearCitations.strip()
+    i = endStat + 6
+    i = page.find("</td>", i+1)
+    if i < 0 :
+        return metrics
+    endStat = page.find("</td>", i+1)
+    if endStat < 0 :
+        return metrics
+    i += 5
+    startStat = page.rfind(">", i, endStat)
+    if startStat < 0 :
+        return metrics
+    h = page[startStat+1:endStat]
+    metrics["h"] = h.strip()
+    i = endStat + 6
+    i = page.find("</td>", i+1)
+    if i < 0 :
+        return metrics
+    i = i + 6
+    i = page.find("</td>", i+1)
+    if i < 0 :
+        return metrics
+    endStat = page.find("</td>", i+1)
+    if endStat < 0 :
+        return metrics
+    i += 5
+    startStat = page.rfind(">", i, endStat)
+    if startStat < 0 :
+        return metrics
+    i10 = page[startStat+1:endStat]
+    metrics["i10"] = i10.strip()
+    return metrics
+
 if __name__ == "__main__" :
     # Rename these variables to something meaningful
     input1 = sys.argv[1]
