@@ -1,8 +1,6 @@
-# Make sure to change the action name here (must be unique).
-# Update the rest as needed.
-name: 'unique-action-goes-here'
-description: 'BRIEF DESCRIPTION OF YOUR ACTION'
-branding: # Look at documentation for branding options/requirements. These are my favorites.
+name: 'bibliometrics'
+description: 'Summarize your Google Scholar bibliometrics in an SVG with GitHub Actions'
+branding: 
   icon: 'book-open'
   color: 'green'
 inputs:
