@@ -37,11 +37,29 @@ class TestSomething(unittest.TestCase) :
         with open("tests/testcase.html.txt", "r") as f :
             page = f.read().replace('\n', '')
             metrics = bib.parseBibliometrics(page)
-            self.assertEqual("2052", metrics["total"])
-            self.assertEqual("364", metrics["fiveYear"])
-            self.assertEqual("25", metrics["h"])
-            self.assertEqual("33", metrics["i10"])
-            print(metrics)
+            self.assertEqual(2052, metrics["total"])
+            self.assertEqual(364, metrics["fiveYear"])
+            self.assertEqual(25, metrics["h"])
+            self.assertEqual(33, metrics["i10"])
+            self.assertEqual(44, metrics["g"])
 
-    def test_anothertestcase(self) :
-        pass
+    def test_generate_image(self) :
+        metrics = {
+            "total" : 2052,
+            "fiveYear" : 364,
+            "h" : 25,
+            "i10" : 33,
+            "g" : 44
+        }
+        colors = {
+            "title" : "#58a6ff",
+            "border" : "rgba(56,139,253,0.4)",
+            "background" : "#010409",
+            "text" : "#c9d1d9"
+        }
+        image = bib.generateBibliometricsImage(
+            metrics,
+            colors,
+            "Bibliometrics"
+        )
+        print(image)
