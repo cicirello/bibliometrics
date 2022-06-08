@@ -220,7 +220,7 @@ def parseBibliometrics(page) :
     i10 = page[startStat+1:endStat]
     metrics["i10"] = int(i10.strip())
     g, most = calculateMostAndG(page)
-    if g > 0 :
+    if g > 0 and g < 100 :
         metrics["g"] = g
     if most > 0 :
         metrics["most"] = most
