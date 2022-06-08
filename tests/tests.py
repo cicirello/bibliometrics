@@ -1,4 +1,4 @@
-# bibliometrics: Summarize your Google Scholar bibliometrics in an SVG with GitHub Actions.
+# bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
 # Copyright (c) 2022 Vincent A Cicirello
 # https://www.cicirello.org/
@@ -42,6 +42,7 @@ class TestSomething(unittest.TestCase) :
             self.assertEqual(25, metrics["h"])
             self.assertEqual(33, metrics["i10"])
             self.assertEqual(44, metrics["g"])
+            self.assertEqual(228, metrics["most"])
 
     def test_generate_image(self) :
         metrics = {
@@ -49,7 +50,8 @@ class TestSomething(unittest.TestCase) :
             "fiveYear" : 364,
             "h" : 25,
             "i10" : 33,
-            "g" : 44
+            "g" : 44,
+            "most" : 228
         }
         colors = {
             "title" : "#58a6ff",
