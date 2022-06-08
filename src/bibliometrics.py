@@ -295,6 +295,25 @@ def getConfiguration(configFilename) :
         print("Error while reading configuration file", configFilename)
         exit(1)
 
+def outputJSON(filename, metrics) :
+    """Outputs the bibliometrics to a json file.
+
+    Keyword arguments:
+    filename - The name of the json file with path.
+    metrics - The dictionary of bibliometrics
+    """
+    # Create the directory if it doesn't exist.
+    directoryName = os.path.dirname(filename)
+    if len(directoryName) > 0 :
+        os.makedirs(directoryName, exist_ok=True, mode=0o777)
+    try:
+        # Write the metrics to a json file
+        with open(filename, "w") as jsonFile :
+            json.dump(metrics, jsonFile, indent=4, sort_keys=True)
+    except IOError:
+        print("Error: An error occurred while writing the metrics to a json file.")
+        exit(1)
+
 if __name__ == "__main__" :
 
     metrics = {
@@ -308,6 +327,8 @@ if __name__ == "__main__" :
 
     configuration = getConfiguration(".bibliometrics.config.json")
 
+    if "jsonOutputFile" in configuration :
+        outputJSON(configuration["jsonOutputFile"], metrics)
     for colors in configuration["svgConfig"] :
         image = generateBibliometricsImage(
             metrics,
