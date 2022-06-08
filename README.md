@@ -7,6 +7,22 @@ This command line utility does the following:
 * generates a JSON file summarizing these bibliometrics; and
 * generates one or more SVG images summarizing these bibliometrics.
 
+## Table of Contents
+
+This README is organized as follows:
+* [Samples](#samples): provides examples of the output of this utility.
+* [Configuration](#configuration): explains how to configure the utility, such as colors for the SVG,
+  file locations, etc.
+* [Configuring the Scholar ID](#configuring-the-scholar-id): explains the two ways of providing your
+  Google Scholar ID to the utility.
+* [Respect Google Scholar's robots.txt](#respect-google-scholars-robotstxt): explains the relevant 
+  portions of Google Scholar's robots.txt as it relates to this, or any tool, designed to gather information 
+  from Scholar. Note that most other tools that provide more functionality (e.g., all of the ones I looked at before
+  implementing this) do not respect that robots.txt. If you wish to submit an issue or pull request requesting 
+  additional functionality, please know that any such request must be possible to implement without violating 
+  Scholar's robots.txt. Otherwise, the issue or pull request will be closed.
+* [License](#license).
+
 ## Samples
 
 Here are a couple sample SVGs.
