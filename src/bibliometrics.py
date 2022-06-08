@@ -26,7 +26,7 @@
 # SOFTWARE.
 # 
 
-import sys, math, os
+import sys, math, os, json
 from datetime import date
 from TextLength import calculateTextLength, calculateTextLength110Weighted
 
@@ -279,6 +279,22 @@ def outputImage(image, filename) :
         print("Error: An error occurred while writing the image to a file.")
         exit(1)
 
+def getConfiguration(configFilename) :
+    """Gets the configuration file.
+
+    Keyword arguments:
+    configFilename - The configuration filename with path
+    """
+    if not os.path.isfile(configFilename) :
+        print("Configuration file", configFilename, "not found.")
+        exit(1)
+    try :
+        with open(configFilename, "r") as f :
+            return json.load(f)
+    except :
+        print("Error while reading configuration file", configFilename)
+        exit(1)
+
 if __name__ == "__main__" :
 
     metrics = {
@@ -290,25 +306,7 @@ if __name__ == "__main__" :
         "most" : 228
     }
 
-    configuration = {
-        "jsonOutputFile" : ".bibliometrics.json",
-        "svgConfig" : [
-            {
-                "filename" : "images/bibliometrics2.svg",
-                "title" : "#58a6ff",
-                "border" : "rgba(56,139,253,0.4)",
-                "background" : "#010409",
-                "text" : "#c9d1d9"
-            },
-            {
-                "filename" : "images/bibliometrics.svg",
-                "title" : "#862d2d",
-                "border" : "#862d2d",
-                "background" : "#f6f0bb",
-                "text" : "#305030"
-            }
-        ]
-    }
+    configuration = getConfiguration(".bibliometrics.json")
 
 
     for colors in configuration["svgConfig"] :
