@@ -24,14 +24,17 @@
 # SOFTWARE.
 # 
 
-
 import unittest
 
 import sys
 sys.path.insert(0,'src')
 import bibliometrics as bib
 
-class TestSomething(unittest.TestCase) :
+class TestBibiometrics(unittest.TestCase) :
+
+    # To have tests output to standard out a sample image,
+    # change this to True.
+    printSampleImage = False
 
     def test_parse(self) :
         with open("tests/testcase.html.txt", "r") as f :
@@ -64,4 +67,5 @@ class TestSomething(unittest.TestCase) :
             colors,
             "Bibliometrics"
         )
-        print(image)
+        if TestBibiometrics.printSampleImage :
+            print(image)
