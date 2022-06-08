@@ -1,6 +1,6 @@
 #!/usr/bin/env -S python3 -B
 #
-# bibliometrics: Summarize your Google Scholar bibliometrics in an SVG with GitHub Actions.
+# bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
 # Copyright (c) 2022 Vincent A Cicirello
 # https://www.cicirello.org/
@@ -27,6 +27,7 @@
 # 
 
 import sys, math
+from datetime import date
 from TextLength import calculateTextLength, calculateTextLength110Weighted
 
 template = """<svg width="{0}" height="{1}" viewBox="0 0 {0} {1}" xmlns="http://www.w3.org/2000/svg" lang="en" xml:lang="en">
@@ -35,9 +36,6 @@ template = """<svg width="{0}" height="{1}" viewBox="0 0 {0} {1}" xmlns="http://
 {9}
 {10}
 {11}
-{12}
-{13}
-{14}
 </g></g></svg>
 """
 
@@ -50,6 +48,11 @@ metricTemplate = """<g transform="translate({0}, {1})">
 <text lengthAdjust="spacingAndGlyphs" textLength="{7}" x="{8}" y="{5}">{9}</text>
 </g></g>"""
 
+lastUpdatedTemplate = """<g transform="translate({0}, {1})">
+<g transform="scale({2})">
+<text lengthAdjust="spacingAndGlyphs" textLength="{3}" x="{4}" y="{5}">{6}</text>
+</g></g>"""
+
 def generateBibliometricsImage(metrics, colors, titleText) :
     """Generates the bibliometrics image as an SVG.
 
@@ -57,122 +60,86 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     metrics - dictionary with the stats
     colors - dictionary with colors
     """
-    titleSize = 18
-    textSize = 14
+    titleSize = 20
+    titleLineHeight = 2 * titleSize + 1
+    textSize = 16
+    smallSize = 12
     margin = 15
     scale = round(0.75 * titleSize / 110, 3)
     stroke = 4
     radius = 6
-    lineHeight = 21
+    lineHeight = round(textSize * 1.5)
+    drop = round(textSize * 12.5 / 14, 1)
+
+    stats = [
+        ("Total citations", "total"),
+        ("Five-year citations", "fiveYear"),
+        ("h-index", "h"),
+        ("i10-index", "i10"),
+        ("g-index", "g"),
+        ("Most-cited paper", "most")
+    ]
+
+    lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
+    lastUpdatedLength = calculateTextLength(lastUpdatedText, smallSize, True, 600)
     
     titleLength = round(calculateTextLength110Weighted(titleText, 600))
     minWidth = calculateTextLength(titleText, titleSize, True, 600) + 2*margin
-    minHeight = 39
+    minWidth = max(minWidth, lastUpdatedLength + 2*margin)
+    for label, key in stats :
+        minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
+    minWidth = math.ceil(minWidth)
+
+    minHeight = titleLineHeight + 2
+    centered = round((minWidth / 2)/scale - titleLength / 2)
     title = titleTemplate.format(
-        str(round(margin/scale)),  #0  x
-        str(round(37/scale)),  #1  y
+        centered, #round(margin/scale),  #0  x
+        round(titleLineHeight/scale),  #1  y
         titleLength,  #2
         "{0:.3f}".format(scale), #3
         colors["title"], #4
         titleText,  #5
         colors["text"] #6
     )
-
-    minWidth = max(minWidth, 2 * calculateTextLength("Total citations", textSize, True, 600) + 2*margin)
-    minWidth = max(minWidth, 2 * calculateTextLength("Five-year citations", textSize, True, 600) + 2*margin)
-    minWidth = max(minWidth, 2 * calculateTextLength("h-index", textSize, True, 600) + 2*margin)
-    minWidth = max(minWidth, 2 * calculateTextLength("i10-index", textSize, True, 600) + 2*margin)
-    minWidth = max(minWidth, 2 * calculateTextLength("g-index", textSize, True, 600) + 2*margin)
-
-    offset = minHeight + lineHeight
-    minHeight += lineHeight
+    offset = minHeight
     scale = round(0.75 * textSize / 110, 3)
 
-    label = "Total citations"
-    data = str(metrics["total"])
-    totalCites = metricTemplate.format(
+    formattedStats = []
+    for label, key in stats :
+        if key in metrics :
+            offset += lineHeight
+            minHeight += lineHeight
+            data = str(metrics[key])
+            dataWidthPreScale = round(calculateTextLength110Weighted(data, 600))
+            entry = metricTemplate.format(
+                margin,
+                offset,
+                scale,
+                round(calculateTextLength110Weighted(label, 600)),
+                0,
+                round(drop/scale),
+                label,
+                dataWidthPreScale,
+                round((minWidth - 2*margin)/scale) - dataWidthPreScale,   #round(minWidth/2/scale),
+                data
+            )
+            formattedStats.append(entry)
+
+    scale = round(0.75 * smallSize / 110, 3)
+
+    offset += 2*lineHeight
+    minHeight += 2*lineHeight
+    lastUpdated = lastUpdatedTemplate.format(
         margin,
         offset,
         scale,
-        round(calculateTextLength110Weighted(label, 600)),
+        round(lastUpdatedLength/scale),
         0,
-        round(12.5/scale),
-        label,
-        round(calculateTextLength110Weighted(data, 600)),
-        round(minWidth/2/scale),
-        data
+        round(round(smallSize * 12.5 / 14, 1)/scale),
+        lastUpdatedText
     )
 
-    offset += lineHeight
     minHeight += lineHeight
-    label = "Five-year citations"
-    data = str(metrics["fiveYear"])
-    fiveYearCites = metricTemplate.format(
-        margin,
-        offset,
-        scale,
-        round(calculateTextLength110Weighted(label, 600)),
-        0,
-        round(12.5/scale),
-        label,
-        round(calculateTextLength110Weighted(data, 600)),
-        round(minWidth/2/scale),
-        data
-    )
-
-    offset += lineHeight
-    minHeight += lineHeight
-    label = "h-index"
-    data = str(metrics["h"])
-    h = metricTemplate.format(
-        margin,
-        offset,
-        scale,
-        round(calculateTextLength110Weighted(label, 600)),
-        0,
-        round(12.5/scale),
-        label,
-        round(calculateTextLength110Weighted(data, 600)),
-        round(minWidth/2/scale),
-        data
-    )
-
-    offset += lineHeight
-    minHeight += lineHeight
-    label = "i10-index"
-    data = str(metrics["i10"])
-    i10 = metricTemplate.format(
-        margin,
-        offset,
-        scale,
-        round(calculateTextLength110Weighted(label, 600)),
-        0,
-        round(12.5/scale),
-        label,
-        round(calculateTextLength110Weighted(data, 600)),
-        round(minWidth/2/scale),
-        data
-    )
-
-    offset += lineHeight
-    minHeight += lineHeight
-    label = "g-index"
-    data = str(metrics["g"])
-    g = metricTemplate.format(
-        margin,
-        offset,
-        scale,
-        round(calculateTextLength110Weighted(label, 600)),
-        0,
-        round(12.5/scale),
-        label,
-        round(calculateTextLength110Weighted(data, 600)),
-        round(minWidth/2/scale),
-        data
-    )
-
-    minHeight += 2 * lineHeight
-    minWidth = math.ceil(minWidth)
     image = template.format(
         minWidth,  #0
         minHeight, #1
@@ -184,11 +151,8 @@ def generateBibliometricsImage(metrics, colors, titleText) :
         colors["border"],  #7
         colors["background"],  #8
         title, #9
-        totalCites, #10
-        fiveYearCites, #11
-        h, #12
-        i10, #13
-        g #14
+        ''.join(formattedStats), #10
+        lastUpdated #11
     )
     return image
 
@@ -251,13 +215,15 @@ def parseBibliometrics(page) :
         return metrics
     i10 = page[startStat+1:endStat]
     metrics["i10"] = int(i10.strip())
-    g = calculateG(page)
+    g, most = calculateMostAndG(page)
     if g > 0 :
         metrics["g"] = g
+    if most > 0 :
+        metrics["most"] = most
     return metrics
 
-def calculateG(page) :
-    """Calculates the g-index.
+def calculateMostAndG(page) :
+    """Calculates the g-index and the most cited paper.
 
     Keyword arguments:
     page - The user profile page
@@ -265,11 +231,12 @@ def calculateG(page) :
     citesList = parseDataForG(page)
     if len(citesList) > 0 :
         citesList.sort(reverse=True)
+        most = citesList[0]
         for i in range(1, len(citesList)) :
             citesList[i] = citesList[i] + citesList[i-1]
         citesList = [ (i+1, x) for i, x in enumerate(citesList) ]
-        return max(y for y, x in citesList if x >= y*y)
-    return 0
+        return max(y for y, x in citesList if x >= y*y), most
+    return 0, 0
     
 
 def parseDataForG(page) :
