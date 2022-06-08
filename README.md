@@ -83,7 +83,7 @@ There are two ways to provide your Google Scholar ID to the utility:
 To use this utility, first ensure that you configure it as specified above. Then execute the following:
 
 ```Shell
-python -B bibliometrics.py
+python -B path/to/utility/bibliometrics.py
 ```
 
 ## Respect Google Scholar's robots.txt
