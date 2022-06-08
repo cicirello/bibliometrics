@@ -1,0 +1,19 @@
+{
+    "jsonOutputFile": ".bibliometrics.json",
+    "svgConfig": [
+        {
+            "background": "#010409",
+            "border": "rgba(56,139,253,0.4)",
+            "filename": "images/bibliometrics2.svg",
+            "text": "#c9d1d9",
+            "title": "#58a6ff"
+        },
+        {
+            "background": "#f6f0bb",
+            "border": "#862d2d",
+            "filename": "images/bibliometrics.svg",
+            "text": "#305030",
+            "title": "#862d2d"
+        }
+    ]
+}
