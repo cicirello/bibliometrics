@@ -1,114 +1,61 @@
-# python-github-action-template
-A template repository for GitHub Actions implemented in Python.
+# bibliometrics
 
-## Files in This Template
+This command line utility does the following:
+* retrieves the first page of your Google Scholar profile;
+* parses from that page your total citations, your five-year citation count, your h-index, your i10-index, and the number of citations of your most-cited paper;
+* computes your g-index provided it is less than 100 (reason for [limitation later](#respect-google-scholar-s-robots-txt));
+* generates a JSON file summarizing these bibliometrics; and
+* generates one or more SVG images summarizing these bibliometrics.
 
-### README.md
+## Configuration
 
-Obviously, update this to reflect your GitHub Action.
+The utility looks for a configuration file `.bibliometrics.config.json` in your current 
+working directory (please note the `.` at the start of the filename). A sample is found
+at the root of this repository: [.bibliometrics.config.json](.bibliometrics.config.json).
 
-### LICENSE
+To generate the JSON summary of your bibliometrics, specify the filename (optionally with path)
+via the `"jsonOutputFile"` field. If this field is not present, then no JSON file will be generated.
 
-Choose your license.  This template is licensed under the MIT license,
-so that is what the LICENSE file indicates. If you use this template,
-either keep the MIT license or update to something compatible.
+The `"svgConfig"` field is an array of JSON objects, such that each object configures one SVG. Each
+of the JSON objects in this array includes the following fields:
+* `"filename"` is the filename (optionally with path) to the target svg file.
+* `"background"` is the background color.
+* `"border"` is the border color.
+* `"title"` is the title color.
+* `"text"` is the color of the rest of the text.
 
-### CHANGELOG.md
+The colors can be defined in any format that is valid within an SVG. For example, you can specify
+RGB, two hex digits for each color channel, with `#010409`; or RGB with one hex digit for each color 
+channel, `#123`. You can also use SVG named colors, such as `white`, as well as RGBA such as
+`rgba(56,139,253,0.4)`. If it is valid as a color in SVG, then it should work. The utility simply inserts
+it for the relevant color within the SVG without validation.
 
-It is a good idea to keep a changelog, so we've provided a template
-of a changelog within this template repository.
+## Configuring the Scholar ID
 
-### dockerignore
+There are two ways to provide your Google Scholar ID to the utility:
+* in the configuration file (see above section) via a field `"scholarID"` (not shown in the example in the
+  repository); or
+* via an environment variable `SCHOLAR_ID`.
 
-The `.dockerignore` is set up as a whitelist, initially 
-allowing only the `Dockerfile` and the `entrypoint.py`.
-If you rename `entrypoint.py`, be sure to edit 
-the `.dockerignore` (or likewise, if your GitHub Action
-needs any additional files while running).
+## Respect Google Scholar's robots.txt
 
-### gitignore
+If you use this utility, please respect Google Scholar's robots.txt. The reason that the
+g-index is only computed by this utility if it is less than 100 derives from Scholar's
+robots.txt. Here is the relevant excerpt:
 
-The `.gitignore` includes Python related things you likely
-won't want to store in git (update as appropriate).
+```robots.txt
+Allow: /citations?user=
+Disallow: /citations?*cstart=
+```
 
-### Dockerfile
+The first line above allows getting a user's profile page. But the second line
+above disallows querying a specific starting reference. This means if you are respecting
+Google Scholar's robots.txt then you are limited to the first page of the profile, which
+can include up to 100 publications. Therefore, we can compute g-index as long as it is not
+greater than 100. However, if we compute 100, we cannot be certain if it is correct or if
+it is actually higher, so this utility excludes a g-index of 100 as well.
 
-The `Dockerfile` in this template pulls an image that
-includes Python, and then sets the entrypoint to `entrypoint.py`.
-If you rename `entrypoint.py` (or need additional files) then
-don't forget to edit the `Dockerfile`.
+## License
 
-Additionally, you will need to decide which docker image to start
-with. There are two that I commonly use that I also maintain,
-both of which can be pulled from either Docker Hub or the Github Container
-Registry. Uncomment/comment as appropriate in the Dockerfile
-as desired. Or if you'd rather not pull one of my images, you can 
-see the source repository for the details.  Here are the options
-found in the Dockerfile comments:
-* An image with Alpine Linux and Python only to keep image small for fast loading: `FROM cicirello/pyaction-lite:3`
-* An image with Alpine Linux, Python, and git, which is also relatively small: `FROM cicirello/pyaction:3`
-* Beginning with version 4, the pyaction image no longer uses Alpine as the 
-  base. It now uses python:3-slim, which is built on Debian (the slim version is 
-  small but not nearly as small as Alpine), on
-  which we have installed the GitHub CLI : `FROM cicirello/pyaction:4`
-* To pull from the Github Container Registry instead of Docker Hub: `FROM ghcr.io/cicirello/pyaction:4` (and likewise for the other images).
-
-The source repositories for these images:
-* https://github.com/cicirello/pyaction-lite
-* https://github.com/cicirello/pyaction
-
-### action.yml
-
-Edit the `action.yml` file to define your action's inputs and outputs
-(see examples in the file).
-
-### entrypoint.py
-
-You can rename this Python file to whatever you want, provided you change
-its name in all other files above that reference it.  The template version
-includes examples of accessing Action inputs and producing outputs.  Make
-sure it is executable (the one in the template is already executable). If
-you simply rename the file, it should keep the executable bit set. However,
-if you delete it and replace it with a new file, you'll need to set it
-executable.
-
-### tests/tests.py
-
-Python unit test cases could go here.
-
-### tests/integration.py
-
-Ideally, after unit testing the Python functions, methods, 
-etc (see above), you should also test the action itself.
-This involves running the action locally in a workflow
-within the action's own repository. If the action generates
-any files, or alters any files, then you can add a step
-to run the tests in `tests/integration.py` to validate the
-action's output. Although you don't necessarily need to do
-this with Python, it may be convenient since Python would
-already be configured in your workflow. 
-
-### .github/dependabot.yml
-
-The template repository enables GitHub's dependabot for keeping dependencies up to date
-(it generates pull requests when new versions are found).  The template file
-enables dependabot for Docker (since we're using Docker for the GitHub Action),
-and GitHub Actions to keep any workflow dependencies up to date.
-
-### .github/workflows/build.yml
-
-This workflow runs on pushes and pull requests against the main branch. It
-executes all Python unit tests (see tests/tests.py section above). It verifies that
-the docker image for the GitHub Action builds. It then executes the GitHub Action
-locally against the action's own repository, as an integration test. Finally, it 
-executes the tests in `tests/integration.py` (see earlier section) to validate
-any files created or edited by the integration test. You might also add a step
-to the workflow to test that outputs are correct as well. 
-
-### .github/workflows/major-release-num.yml
-
-This workflow maintains a major release tag (e.g., v1 if current release 
-is v1.x.y). It runs on each release and either creates the tag (if this is the
-first release of a new major release number) or moves it if this is a minor
-or patch level release. __IMPORTANT: You must edit this with your name, etc in
-the commit and push step.__
+The code in this repository is released under
+the [MIT License](LICENSE).
