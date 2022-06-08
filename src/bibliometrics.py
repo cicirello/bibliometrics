@@ -78,10 +78,10 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     stats = [
         ("Total citations", "total"),
         ("Five-year citations", "fiveYear"),
+        ("Most-cited paper", "most"),
         ("h-index", "h"),
         ("i10-index", "i10"),
-        ("g-index", "g"),
-        ("Most-cited paper", "most")
+        ("g-index", "g")
     ]
 
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
