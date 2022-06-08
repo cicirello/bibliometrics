@@ -308,7 +308,6 @@ if __name__ == "__main__" :
 
     configuration = getConfiguration(".bibliometrics.json")
 
-
     for colors in configuration["svgConfig"] :
         image = generateBibliometricsImage(
             metrics,
