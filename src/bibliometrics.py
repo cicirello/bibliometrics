@@ -349,6 +349,33 @@ def getScholarProfilePage(profileID) :
         print("Exiting....")
         exit(1)
 
+def validateMetrics(metrics) :
+    """Checks for parsing errors.
+
+    Keyword arguments:
+    metrics - The parsed and computed bibliometrics
+    """
+    valid = True
+    if "total" not in metrics :
+        valid = False
+        print("ERROR: Failed to parse total citations.")
+    if "fiveYear" not in metrics :
+        valid = False
+        print("ERROR: Failed to parse five-year citations.")
+    if "h" not in metrics :
+        valid = False
+        print("ERROR: Failed to parse h-index.")
+    if "i10" not in metrics :
+        valid = False
+        print("ERROR: Failed to parse i10-index.")
+    if "g" not in metrics :
+        print("WARNING: Failed to parse data needed to compute g-index.")
+    if "most" not in metrics :
+        print("WARNING: Failed to parse data needed to compute most-cited paper.")
+    if not valid :
+        print("Exiting....")
+        exit(1)
+
 if __name__ == "__main__" :
 
     metrics = {
@@ -364,8 +391,21 @@ if __name__ == "__main__" :
 
     previousMetrics = readPreviousBibliometrics(configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
 
-    page = getScholarProfilePage("PROFILE_ID_GOES_HERE")
-    print(page)
+    scholarID = os.environ["SCHOLAR_ID"] if "SCHOLAR_ID" in os.environ else None
+    if scholarID == None :
+        if "scholarID" in configuration :
+            scholarID = configuration["scholarID"]
+
+    if scholarID == None :
+        print("No Scholar ID provided.")
+        print("Set either via SCHOLAR_ID environment variable or scholarID field in config file.")
+        print("Exiting....")
+        exit(1)
+
+    page = getScholarProfilePage(scholarID)
+
+    metrics = parseBibliometrics(page)
+    validateMetrics(metrics)
 
     if previousMetrics != metrics :
         if "jsonOutputFile" in configuration :
