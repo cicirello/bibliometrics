@@ -26,7 +26,7 @@
 # SOFTWARE.
 # 
 
-import sys, math
+import sys, math, os
 from datetime import date
 from TextLength import calculateTextLength, calculateTextLength110Weighted
 
@@ -154,7 +154,7 @@ def generateBibliometricsImage(metrics, colors, titleText) :
         ''.join(formattedStats), #10
         lastUpdated #11
     )
-    return image
+    return image.replace("\n", "")
 
 def parseBibliometrics(page) :
     """Parses a Scholar Profile for the bibliometrics.
@@ -238,7 +238,6 @@ def calculateMostAndG(page) :
         return max(y for y, x in citesList if x >= y*y), most
     return 0, 0
     
-
 def parseDataForG(page) :
     """Parses the cites per publication for calculating g-index
 
@@ -260,17 +259,66 @@ def parseDataForG(page) :
         nextLeft = page.find(marker, right)
     return citesList
 
+def outputImage(image, filename) :
+    """Outputs the SVG to a file.
+
+    Keyword arguments:
+    image - The SVG as a string
+    filename - The filename with path
+    """
+    # Create the directory if it doesn't exist.
+    directoryName = os.path.dirname(filename)
+    if len(directoryName) > 0 :
+        os.makedirs(directoryName, exist_ok=True, mode=0o777)
+    try:
+        # Write the image to a file
+        with open(filename, "wb") as file:
+            image = image.encode(encoding="UTF-8")
+            file.write(image)
+    except IOError:
+        print("Error: An error occurred while writing the image to a file.")
+        exit(1)
+
 if __name__ == "__main__" :
-    # Rename these variables to something meaningful
-    input1 = sys.argv[1]
-    input2 = sys.argv[2]
+
+    metrics = {
+        "total" : 2052,
+        "fiveYear" : 364,
+        "h" : 25,
+        "i10" : 33,
+        "g" : 44,
+        "most" : 228
+    }
+
+    configuration = {
+        "jsonOutputFile" : ".bibliometrics.json",
+        "svgConfig" : [
+            {
+                "filename" : "images/bibliometrics2.svg",
+                "title" : "#58a6ff",
+                "border" : "rgba(56,139,253,0.4)",
+                "background" : "#010409",
+                "text" : "#c9d1d9"
+            },
+            {
+                "filename" : "images/bibliometrics.svg",
+                "title" : "#862d2d",
+                "border" : "#862d2d",
+                "background" : "#f6f0bb",
+                "text" : "#305030"
+            }
+        ]
+    }
 
 
-    # Fake example outputs
-    output1 = "Hello"
-    output2 = "World"
+    for colors in configuration["svgConfig"] :
+        image = generateBibliometricsImage(
+            metrics,
+            colors,
+            "Bibliometrics"
+        )
+        outputImage(image, colors["filename"])
+    
+    
 
-    # This is how you produce outputs.
-    # Make sure corresponds to output variable names in action.yml
-    print("::set-output name=output-one::" + output1)
-    print("::set-output name=output-two::" + output2)
+
