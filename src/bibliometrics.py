@@ -378,15 +378,6 @@ def validateMetrics(metrics) :
 
 if __name__ == "__main__" :
 
-    metrics = {
-        "total" : 2052,
-        "fiveYear" : 364,
-        "h" : 25,
-        "i10" : 33,
-        "g" : 44,
-        "most" : 228
-    }
-
     configuration = getConfiguration(".bibliometrics.config.json")
 
     previousMetrics = readPreviousBibliometrics(configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
