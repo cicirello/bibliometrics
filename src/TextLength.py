@@ -1,5 +1,5 @@
 #
-# bibliometrics: Summarize your Google Scholar bibliometrics in an SVG with GitHub Actions.
+# TextLength.py: A utility for computing lengths of text
 # 
 # Copyright (c) 2021-2022 Vincent A Cicirello
 # https://www.cicirello.org/
