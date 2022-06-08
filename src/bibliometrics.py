@@ -314,6 +314,21 @@ def outputJSON(filename, metrics) :
         print("Error: An error occurred while writing the metrics to a json file.")
         exit(1)
 
+def readPreviousBibliometrics(filename) :
+    """Reads the previous bibliometrics from the json file
+    if it exists. Returns None if it doesn't exist or otherwise cannot be read.
+
+    Keyword arguments:
+    filename - The filename of the json file with path from the prior run.
+    """
+    if os.path.isfile(filename) :
+        try :
+            with open(filename, "r") as f :
+                return json.load(f)
+        except :
+            return None
+    return None
+
 if __name__ == "__main__" :
 
     metrics = {
@@ -327,15 +342,19 @@ if __name__ == "__main__" :
 
     configuration = getConfiguration(".bibliometrics.config.json")
 
-    if "jsonOutputFile" in configuration :
-        outputJSON(configuration["jsonOutputFile"], metrics)
-    for colors in configuration["svgConfig"] :
-        image = generateBibliometricsImage(
-            metrics,
-            colors,
-            "Bibliometrics"
-        )
-        outputImage(image, colors["filename"])
+    previousMetrics = readPreviousBibliometrics(configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
+
+    if previousMetrics != metrics :
+        if "jsonOutputFile" in configuration :
+            outputJSON(configuration["jsonOutputFile"], metrics)
+            
+        for colors in configuration["svgConfig"] :
+            image = generateBibliometricsImage(
+                metrics,
+                colors,
+                "Bibliometrics"
+            )
+            outputImage(image, colors["filename"])
     
     
 
