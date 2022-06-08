@@ -15,6 +15,7 @@ This README is organized as follows:
   file locations, etc.
 * [Configuring the Scholar ID](#configuring-the-scholar-id): explains the two ways of providing your
   Google Scholar ID to the utility.
+* [Usage](#usage): how to run.
 * [Respect Google Scholar's robots.txt](#respect-google-scholars-robotstxt): explains the relevant 
   portions of Google Scholar's robots.txt as it relates to this, or any tool, designed to gather information 
   from Scholar. Note that most other tools that provide more functionality (e.g., all of the ones I looked at before
@@ -76,6 +77,14 @@ There are two ways to provide your Google Scholar ID to the utility:
 * in the configuration file (see above section) via a field `"scholarID"` (not shown in the example in the
   repository); or
 * via an environment variable `SCHOLAR_ID`.
+
+## Usage
+
+To use this utility, first ensure that you configure it as specified above. Then execute the following:
+
+```Shell
+python -B bibliometrics.py
+```
 
 ## Respect Google Scholar's robots.txt
 
