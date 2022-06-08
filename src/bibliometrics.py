@@ -55,6 +55,8 @@ lastUpdatedTemplate = """<g transform="translate({0}, {1})">
 <text lengthAdjust="spacingAndGlyphs" textLength="{3}" x="{4}" y="{5}">{6}</text>
 </g></g>"""
 
+urlTemplate = "https://scholar.google.com/citations?user={0}&pagesize=100"
+
 def generateBibliometricsImage(metrics, colors, titleText) :
     """Generates the bibliometrics image as an SVG.
 
@@ -337,10 +339,10 @@ def getScholarProfilePage(profileID) :
     Keyword arguments:
     profileID - Scholar profile ID
     """
-    url = "https://www.cicirello.org/e/"
+    url = urlTemplate.format(profileID)
     try :
         with urlopen(url) as response :
-            return response.read().decode()
+            return response.read().decode(response.headers.get_content_charset())
     except HTTPError as e:
         print("ERROR: Failed to retrieve the profile page!")
         print(e.status)
