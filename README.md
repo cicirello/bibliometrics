@@ -86,6 +86,12 @@ To use this utility, first ensure that you configure it as specified above. Then
 python -B path/to/utility/bibliometrics.py
 ```
 
+If `python` on your system is mapped to Python 2, then you will actually need:
+
+```Shell
+python3 -B path/to/utility/bibliometrics.py
+```
+
 ## Respect Google Scholar's robots.txt
 
 If you use this utility, please respect Google Scholar's robots.txt. The reason that the
