@@ -28,6 +28,8 @@
 
 import sys, math, os, json
 from datetime import date
+from urllib.request import urlopen
+from urllib.error import HTTPError
 from TextLength import calculateTextLength, calculateTextLength110Weighted
 
 template = """<svg width="{0}" height="{1}" viewBox="0 0 {0} {1}" xmlns="http://www.w3.org/2000/svg" lang="en" xml:lang="en">
@@ -329,6 +331,24 @@ def readPreviousBibliometrics(filename) :
             return None
     return None
 
+def getScholarProfilePage(profileID) :
+    """Gets the Scholar profile page.
+
+    Keyword arguments:
+    profileID - Scholar profile ID
+    """
+    url = "https://www.cicirello.org/e/"
+    try :
+        with urlopen(url) as response :
+            return response.read().decode()
+    except HTTPError as e:
+        print("ERROR: Failed to retrieve the profile page!")
+        print(e.status)
+        print(e.reason)
+        print(e.headers)
+        print("Exiting....")
+        exit(1)
+
 if __name__ == "__main__" :
 
     metrics = {
@@ -343,6 +363,9 @@ if __name__ == "__main__" :
     configuration = getConfiguration(".bibliometrics.config.json")
 
     previousMetrics = readPreviousBibliometrics(configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
+
+    page = getScholarProfilePage("PROFILE_ID_GOES_HERE")
+    print(page)
 
     if previousMetrics != metrics :
         if "jsonOutputFile" in configuration :
