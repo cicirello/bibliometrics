@@ -32,7 +32,7 @@ import bibliometrics as bib
 
 class TestBibiometrics(unittest.TestCase) :
 
-    # To have tests output to standard out a sample image,
+    # To have tests generate sample images (to files),
     # change this to True.
     printSampleImage = False
 
@@ -67,5 +67,17 @@ class TestBibiometrics(unittest.TestCase) :
             colors,
             "Bibliometrics"
         )
+        colors2 = {
+            "background": "#f6f0bb",
+            "border": "#862d2d",
+            "text": "#305030",
+            "title": "#862d2d"
+        }
+        image2 = bib.generateBibliometricsImage(
+            metrics,
+            colors2,
+            "Bibliometrics"
+        )
         if TestBibiometrics.printSampleImage :
-            print(image)
+            bib.outputImage(image, "images/bibliometrics2.svg")
+            bib.outputImage(image2, "images/bibliometrics.svg")

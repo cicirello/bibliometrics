@@ -38,6 +38,8 @@ template = """<svg width="{0}" height="{1}" viewBox="0 0 {0} {1}" xmlns="http://
 {9}
 {10}
 {11}
+{12}
+{13}
 </g></g></svg>
 """
 
@@ -57,6 +59,10 @@ lastUpdatedTemplate = """<g transform="translate({0}, {1})">
 
 urlTemplate = "https://scholar.google.com/citations?user={0}&pagesize=100"
 
+scholarLogoTemplate = """
+<svg x="{0}" y="{1}" width="{2}" height="{2}" viewBox="0 0 512 512"><path fill="#4285f4" d="M256 411.12L0 202.667 256 0z"/><path fill="#356ac3" d="M256 411.12l256-208.453L256 0z"/><circle fill="#a0c3ff" cx="256" cy="362.667" r="149.333"/><path fill="#76a7fa" d="M121.037 298.667c23.968-50.453 75.392-85.334 134.963-85.334s110.995 34.881 134.963 85.334H121.037z"/></svg>
+"""
+
 def generateBibliometricsImage(metrics, colors, titleText) :
     """Generates the bibliometrics image as an SVG.
 
@@ -64,9 +70,9 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     metrics - dictionary with the stats
     colors - dictionary with colors
     """
-    titleSize = 20
+    titleSize = 18
     titleLineHeight = 2 * titleSize + 1
-    textSize = 16
+    textSize = 14
     smallSize = 12
     margin = 15
     scale = round(0.75 * titleSize / 110, 3)
@@ -74,6 +80,7 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     radius = 6
     lineHeight = round(textSize * 1.5)
     drop = round(textSize * 12.5 / 14, 1)
+    scholarLogoDimensions = 32
 
     stats = [
         ("Total citations", "total"),
@@ -88,7 +95,7 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     lastUpdatedLength = calculateTextLength(lastUpdatedText, smallSize, True, 600)
     
     titleLength = round(calculateTextLength110Weighted(titleText, 600))
-    minWidth = calculateTextLength(titleText, titleSize, True, 600) + 2*margin
+    minWidth = calculateTextLength(titleText, titleSize, True, 600) + 4*margin + 2*scholarLogoDimensions
     minWidth = max(minWidth, lastUpdatedLength + 2*margin)
     for label, key in stats :
         minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
@@ -156,7 +163,9 @@ def generateBibliometricsImage(metrics, colors, titleText) :
         colors["background"],  #8
         title, #9
         ''.join(formattedStats), #10
-        lastUpdated #11
+        lastUpdated, #11
+        scholarLogoTemplate.format(margin, margin, scholarLogoDimensions),  #12
+        scholarLogoTemplate.format(minWidth - margin - scholarLogoDimensions, margin, scholarLogoDimensions)  #13
     )
     return image.replace("\n", "")
 
