@@ -79,5 +79,5 @@ class TestBibiometrics(unittest.TestCase) :
             "Bibliometrics"
         )
         if TestBibiometrics.printSampleImage :
-            bib.outputImage(image, "sample.svg")
-            bib.outputImage(image2, "sample2.svg")
+            bib.outputImage(image, "images/bibliometrics2.svg")
+            bib.outputImage(image2, "images/bibliometrics.svg")
