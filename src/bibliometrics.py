@@ -64,9 +64,9 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     metrics - dictionary with the stats
     colors - dictionary with colors
     """
-    titleSize = 20
+    titleSize = 18
     titleLineHeight = 2 * titleSize + 1
-    textSize = 16
+    textSize = 14
     smallSize = 12
     margin = 15
     scale = round(0.75 * titleSize / 110, 3)
