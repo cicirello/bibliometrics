@@ -9,11 +9,11 @@
             "title": "#58a6ff"
         },
         {
-            "background": "#f6f0bb",
-            "border": "#862d2d",
+            "background": "#f6f8fa",
+            "border": "rgba(84,174,255,0.4)",
             "filename": "images/bibliometrics.svg",
-            "text": "#305030",
-            "title": "#862d2d"
+            "text": "#24292f",
+            "title": "#0969da"
         }
     ]
 }

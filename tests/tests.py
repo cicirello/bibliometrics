@@ -68,10 +68,10 @@ class TestBibiometrics(unittest.TestCase) :
             "Bibliometrics"
         )
         colors2 = {
-            "background": "#f6f0bb",
-            "border": "#862d2d",
-            "text": "#305030",
-            "title": "#862d2d"
+            "background": "#f6f8fa",
+            "border": "rgba(84,174,255,0.4)",
+            "text": "#24292f",
+            "title": "#0969da"
         }
         image2 = bib.generateBibliometricsImage(
             metrics,
