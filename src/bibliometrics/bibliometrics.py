@@ -1,5 +1,3 @@
-#!/usr/bin/env -S python3 -B
-#
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
 # Copyright (c) 2022 Vincent A Cicirello
@@ -30,7 +28,7 @@ import sys, math, os, json
 from datetime import date
 from urllib.request import urlopen
 from urllib.error import HTTPError
-from TextLength import calculateTextLength, calculateTextLength110Weighted
+from .text_length import calculateTextLength, calculateTextLength110Weighted
 
 template = """<svg width="{0}" height="{1}" viewBox="0 0 {0} {1}" xmlns="http://www.w3.org/2000/svg" lang="en" xml:lang="en">
 <rect x="{2}" y="{2}" stroke-width="{3}" rx="{4}" width="{5}" height="{6}" stroke="{7}" fill="{8}"/>
@@ -420,7 +418,3 @@ def main() :
                 "Bibliometrics"
             )
             outputImage(image, colors["filename"])
-
-    
-if __name__ == "__main__" :
-    main()
