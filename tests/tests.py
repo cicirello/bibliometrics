@@ -28,7 +28,7 @@ import unittest
 
 import sys
 sys.path.insert(0,'src')
-import bibliometrics as bib
+import bibliometrics.bibliometrics as bib
 
 class TestBibiometrics(unittest.TestCase) :
 
