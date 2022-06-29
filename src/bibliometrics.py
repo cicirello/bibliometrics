@@ -387,8 +387,8 @@ def validateMetrics(metrics) :
         print("Exiting....")
         exit(1)
 
-if __name__ == "__main__" :
-
+def main() :
+    """Entry point for the utility."""
     configuration = getConfiguration(".bibliometrics.config.json")
 
     previousMetrics = readPreviousBibliometrics(configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
@@ -420,7 +420,7 @@ if __name__ == "__main__" :
                 "Bibliometrics"
             )
             outputImage(image, colors["filename"])
-    
-    
 
-
+    
+if __name__ == "__main__" :
+    main()
