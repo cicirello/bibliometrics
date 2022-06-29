@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2022-06-29
 
+**BREAKING CHANGES** Entry point has changed--now runs as a module rather than a script.
+
 ### Added
   
 ### Changed
+* Restructured code into a Python module enabling installing and running with `-m` flag.
 * Minor refactoring for miscellaneous improvements.
 
 ### Deprecated
