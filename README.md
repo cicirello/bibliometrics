@@ -2,7 +2,7 @@
 
 | __Packages and Releases__ | [![PyPI](https://img.shields.io/pypi/v/bibliometrics?logo=pypi)](https://pypi.org/project/bibliometrics/) [![GitHub release (latest by date)](https://img.shields.io/github/v/release/cicirello/bibliometrics?logo=GitHub)](https://github.com/cicirello/bibliometrics/releases) |
 | :--- | :--- |
-| __Build Status__ | [![build](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml) |
+| __Build Status__ | [![build](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml) [![CodeQL](https://github.com/cicirello/bibliometrics/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/codeql-analysis.yml) |
 | __Security__ | [![Snyk security score](https://snyk-widget.herokuapp.com/badge/pip/bibliometrics/badge.svg)](https://snyk.io/vuln/pip%3Abibliometrics) |
 | __Source Info__ | [![License](https://img.shields.io/github/license/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics/blob/main/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/cicirello/bibliometrics) |
 
