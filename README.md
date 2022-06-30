@@ -72,6 +72,30 @@ channel, `#123`. You can also use SVG named colors, such as `white`, as well as 
 `rgba(56,139,253,0.4)`. If it is valid as a color in SVG, then it should work. The utility simply inserts
 it for the relevant color within the SVG without validation.
 
+Here is a sample `.bibliometrics.config.json`:
+
+```JSON
+{
+    "jsonOutputFile": "bibliometrics.json",
+    "svgConfig": [
+        {
+            "background": "#010409",
+            "border": "rgba(56,139,253,0.4)",
+            "filename": "images/bibliometrics2.svg",
+            "text": "#c9d1d9",
+            "title": "#58a6ff"
+        },
+        {
+            "background": "#f6f8fa",
+            "border": "rgba(84,174,255,0.4)",
+            "filename": "images/bibliometrics.svg",
+            "text": "#24292f",
+            "title": "#0969da"
+        }
+    ]
+}
+```
+
 ## Configuring the Scholar ID
 
 There are two ways to provide your Google Scholar ID to the utility:
