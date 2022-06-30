@@ -6,19 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2022-06-30
 
-**BREAKING CHANGES** Entry point has changed--now runs as a module rather than a script.
-
 ### Added
   
 ### Changed
-* Restructured code into a Python module enabling installing and running with `-m` flag.
-* Minor refactoring for miscellaneous improvements.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+### CI/CD
+
+
+## [2.0.0] - 2022-06-30
+
+**BREAKING CHANGES** Entry point has changed--now runs as a module rather than a script.
+
+### Added
+* First release available via PyPI.
+  
+### Changed
+* Restructured code into a Python module enabling installing and running with `-m` flag.
+* Minor refactoring for miscellaneous improvements.
 
 ### CI/CD
 * Enabled publishing to PyPI on all GitHub releases.
