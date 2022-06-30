@@ -15,7 +15,7 @@ This README is organized as follows:
   file locations, etc.
 * [Configuring the Scholar ID](#configuring-the-scholar-id): explains the two ways of providing your
   Google Scholar ID to the utility.
-* [Usage](#usage): how to run.
+* [Usage](#usage): how to install and run.
 * [Respect Google Scholar's robots.txt](#respect-google-scholars-robotstxt): explains the relevant 
   portions of Google Scholar's robots.txt as it relates to this, or any tool, designed to gather information 
   from Scholar. Note that most other tools that provide more functionality (e.g., all of the ones I looked at before
@@ -105,16 +105,44 @@ There are two ways to provide your Google Scholar ID to the utility:
 
 ## Usage
 
-To use this utility, first ensure that you configure it as specified above. Then execute the following:
+### Installing
+
+To install from PyPi (Unix and MacOS):
 
 ```Shell
-python -m bibliometrics
+python3 -m pip install bibliometrics
 ```
 
-This utility requires Python 3. If `python` on your system is mapped to Python 2, then you will actually need:
+To install from PyPI (Windows):
+
+```Shell
+py -m pip install bibliometrics
+```
+
+To upgrade to latest version from PyPi (Unix and MacOS):
+
+```Shell
+python3 -m pip install --upgrade bibliometrics
+```
+
+To upgrade to latest version from PyPI (Windows):
+
+```Shell
+py -m pip install --upgrade bibliometrics
+```
+
+### Running
+
+To use this utility, first ensure that you configure it as specified above. Then execute the following (Unix and MacOS):
 
 ```Shell
 python3 -m bibliometrics
+```
+
+Or on Windows:
+
+```Shell
+py -m bibliometrics
 ```
 
 ## Respect Google Scholar's robots.txt
