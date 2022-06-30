@@ -189,7 +189,7 @@ You can support the project in a number of ways:
 * __Sponsoring__: You can also consider sponsoring via one of the following:
 
 | [![GitHub Sponsors](https://actions.cicirello.org/images/github-sponsors.svg)](https://github.com/sponsors/cicirello) | [![Liberapay](https://actions.cicirello.org/images/Liberapay.svg)](https://liberapay.com/cicirello) |
-| --- | --- |
+| :---: | :---: |
 | [![Ko-Fi](https://actions.cicirello.org/images/ko-fi.svg)](https://ko-fi.com/cicirello) | |
   
 ## Contribute
