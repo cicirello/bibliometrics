@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bibliometrics"
+version = "0.0.1"
+authors = [
+  { name="Vincent A. Cicirello", email="development@cicirello.org" },
+]
+description = "Summarize your Google Scholar bibliometrics in an SVG"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Other/Nonlisted Topic",
+    "Topic :: Multimedia :: Graphics",
+]
+keywords = [
+    "bibliometrics",
+    "g-index",
+    "h-index",
+    "i10-index",
+    "journals",
+    "publications",
+    "researcher",
+    "scholar",
+    "SVG",
+    "SVG generation",
+]
+
+[project.urls]
+"GitHub Repository" = "https://github.com/cicirello/bibliometrics"
+"Bug Tracker" = "https://github.com/cicirello/bibliometrics/issues"
+"Changelog" = "https://github.com/cicirello/bibliometrics/blob/main/CHANGELOG.md"
+
+[tool.hatch.build]
+exclude = [
+    "/.github",
+    "/images",
+    "/.bibliometrics.config.json",
+    "/bibliometrics.json",
+]
