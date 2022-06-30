@@ -187,9 +187,9 @@ You can support the project in a number of ways:
 * __Contributing Code__: If there is an open issue that you think
   you can help with, submit a pull request.
 * __Sponsoring__: You can also consider sponsoring 
-  via: [![GitHub Sponsors](https://www.cicirello.org/images/github-sponsors.svg)](https://github.com/sponsors/cicirello), 
-  [![Liberapay](https://www.cicirello.org/images/Liberapay.svg)](https://liberapay.com/cicirello), or
-  [![Ko-Fi](https://www.cicirello.org/images/ko-fi.svg)](https://ko-fi.com/cicirello).
+  via: [![GitHub Sponsors](https://actions.cicirello.org/images/github-sponsors.svg)](https://github.com/sponsors/cicirello), 
+  [![Liberapay](https://actions.cicirello.org/images/Liberapay.svg)](https://liberapay.com/cicirello), or
+  [![Ko-Fi](https://actions.cicirello.org/images/ko-fi.svg)](https://ko-fi.com/cicirello).
   
 ## Contribute
 
