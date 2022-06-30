@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### CI/CD
+* Enabled publishing to PyPI on all GitHub releases.
 * Enabled CodeQL analysis on all push and pull-request events.
 
 
