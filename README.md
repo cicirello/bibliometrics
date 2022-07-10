@@ -4,7 +4,7 @@
 | :--- | :--- |
 | __Build Status__ | [![build](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml) [![CodeQL](https://github.com/cicirello/bibliometrics/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/codeql-analysis.yml) |
 | __Security__ | [![Snyk security score](https://snyk-widget.herokuapp.com/badge/pip/bibliometrics/badge.svg)](https://snyk.io/vuln/pip%3Abibliometrics) |
-| __Source Info__ | [![License](https://img.shields.io/github/license/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics/blob/main/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/cicirello/bibliometrics) |
+| __Source Info__ | [![License](https://img.shields.io/github/license/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics/blob/main/LICENSE) [![GitHub top language](https://img.shields.io/github/languages/top/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics) |
 | __Support__ | [![GitHub Sponsors](https://img.shields.io/badge/sponsor-30363D?logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/cicirello) [![Liberapay](https://img.shields.io/badge/Liberapay-F6C915?logo=liberapay&logoColor=black)](https://liberapay.com/cicirello) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?logo=ko-fi&logoColor=white)](https://ko-fi.com/cicirello) |
 
 This command line utility does the following:
