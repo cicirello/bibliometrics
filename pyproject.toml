@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bibliometrics"
-version = "2.0.0"
+version = "2.1.0"
 authors = [
   { name="Vincent A. Cicirello", email="development@cicirello.org" },
 ]
@@ -25,10 +25,14 @@ keywords = [
     "g-index",
     "h-index",
     "i10-index",
+    "i100-index",
+    "i1000-index",
+    "i10000-index",
     "journals",
     "publications",
     "researcher",
     "scholar",
+    "scientometrics",
     "SVG",
     "SVG generation",
 ]
