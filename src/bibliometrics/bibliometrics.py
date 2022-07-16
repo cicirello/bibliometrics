@@ -86,6 +86,9 @@ def generateBibliometricsImage(metrics, colors, titleText) :
         ("Most-cited paper", "most"),
         ("h-index", "h"),
         ("i10-index", "i10"),
+        ("i100-index", "i100"),
+        ("i1000-index", "i1000"),
+        ("i10000-index", "i10000"),
         ("g-index", "g")
     ]
 
@@ -226,14 +229,20 @@ def parseBibliometrics(page) :
         return metrics
     i10 = page[startStat+1:endStat]
     metrics["i10"] = int(i10.strip())
-    g, most = calculateMostAndG(page)
+    g, most, i100, i1000, i10000 = calculate_additional(page)
     if g > 0 and g < 100 :
         metrics["g"] = g
     if most > 0 :
         metrics["most"] = most
+    if i100 > 0 and i100 < 100 :
+        metrics["i100"] = i100
+    if i1000 > 0 and i1000 < 100 :
+        metrics["i1000"] = i1000
+    if i10000 > 0 and i10000 < 100 :
+        metrics["i10000"] = i10000
     return metrics
 
-def calculateMostAndG(page) :
+def calculate_additional(page) :
     """Calculates the g-index and the most cited paper.
 
     Keyword arguments:
@@ -243,11 +252,14 @@ def calculateMostAndG(page) :
     if len(citesList) > 0 :
         citesList.sort(reverse=True)
         most = citesList[0]
+        i100 = sum(1 for x in citesList if x >= 100)
+        i1000 = sum(1 for x in citesList if x >= 1000)
+        i10000 = sum(1 for x in citesList if x >= 10000)
         for i in range(1, len(citesList)) :
             citesList[i] = citesList[i] + citesList[i-1]
         citesList = [ (i+1, x) for i, x in enumerate(citesList) ]
-        return max(y for y, x in citesList if x >= y*y), most
-    return 0, 0
+        return max(y for y, x in citesList if x >= y*y), most, i100, i1000, i10000
+    return 0, 0, 0, 0, 0
     
 def parseDataForG(page) :
     """Parses the cites per publication for calculating g-index

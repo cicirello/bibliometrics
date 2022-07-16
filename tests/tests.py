@@ -46,6 +46,9 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(33, metrics["i10"])
             self.assertEqual(44, metrics["g"])
             self.assertEqual(228, metrics["most"])
+            self.assertEqual(3, metrics["i100"])
+            self.assertFalse("i1000" in metrics)
+            self.assertFalse("i10000" in metrics)
 
     def test_generate_image(self) :
         metrics = {
@@ -53,6 +56,7 @@ class TestBibiometrics(unittest.TestCase) :
             "fiveYear" : 364,
             "h" : 25,
             "i10" : 33,
+            "i100" : 3,
             "g" : 44,
             "most" : 228
         }
