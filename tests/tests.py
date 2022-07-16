@@ -85,3 +85,4 @@ class TestBibiometrics(unittest.TestCase) :
         if TestBibiometrics.printSampleImage :
             bib.outputImage(image, "images/bibliometrics2.svg")
             bib.outputImage(image2, "images/bibliometrics.svg")
+            bib.outputJSON("bibliometrics.json", metrics)
