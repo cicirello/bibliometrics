@@ -11,7 +11,7 @@ This command line utility does the following:
 * retrieves the first page of your Google Scholar profile;
 * parses from that page your total citations, your five-year citation count, your h-index, your i10-index, and the number of citations of your most-cited paper;
 * computes your g-index provided if it is less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
-* computes your i100-index, i1000-index, and i10000-index, hiding any that are 0, and provided they are less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
+* computes your i100-index, i1000-index, and i10000-index ([doi:10.1007/s11192-020-03831-9](https://doi.org/10.1007/s11192-020-03831-9)), hiding any that are 0, and provided they are less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
 * generates a JSON file summarizing these bibliometrics; and
 * generates one or more SVG images summarizing these bibliometrics.
 
