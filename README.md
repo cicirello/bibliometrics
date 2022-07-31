@@ -20,6 +20,8 @@ bibliometrics only. For example, I am using it to generate and update such an SV
 profile twice monthly. It is not intended for analyzing multiple researchers' bibliometrics,
 and requests for such functionality will be rejected (there are other tools for that).
 
+__Blog Post:__ [Your Citation Metrics in an SVG for Your Website](https://dev.to/cicirello/your-citation-metrics-in-an-svg-for-your-website-17bp) (Posted on DEV.to on July 22, 2022) 
+
 ## Table of Contents
 
 This README is organized as follows:
