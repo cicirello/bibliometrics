@@ -15,10 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
-* Reordered the bibliometrics, moving g-index immediately after h-index, which looks better
-  for cases when several of i10, i100, i1000, and i10000 are non-zero.
 
 ### CI/CD
+
+
+## [2.1.1] - 2022-08-01
+
+### Fixed
+* Reordered the bibliometrics, moving g-index immediately after h-index, which looks better
+  for cases when several of i10, i100, i1000, and i10000 are non-zero.
 
 
 ## [2.1.0] - 2022-07-16
