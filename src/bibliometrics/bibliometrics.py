@@ -86,6 +86,7 @@ def generateBibliometricsImage(metrics, colors, titleText) :
         ("Most-cited paper", "most"),
         ("h-index", "h"),
         ("g-index", "g"),
+        ("e-index", "e"),
         ("i10-index", "i10"),
         ("i100-index", "i100"),
         ("i1000-index", "i1000"),
@@ -229,7 +230,7 @@ def parseBibliometrics(page) :
         return metrics
     i10 = page[startStat+1:endStat]
     metrics["i10"] = int(i10.strip())
-    g, most, i100, i1000, i10000 = calculate_additional(page)
+    g, most, i100, i1000, i10000, e = calculate_additional(page, metrics["h"])
     if g > 0 and g < 100 :
         metrics["g"] = g
     if most > 0 :
@@ -240,13 +241,17 @@ def parseBibliometrics(page) :
         metrics["i1000"] = i1000
     if i10000 > 0 and i10000 < 100 :
         metrics["i10000"] = i10000
+    if e > 0.0 :
+        metrics["e"] = "{0:.2f}".format(e)
     return metrics
 
-def calculate_additional(page) :
-    """Calculates the g-index and the most cited paper.
-
+def calculate_additional(page, h) :
+    """Calculates the g-index, e-index, i100-index, i1000-index, i10000-index,
+    and the most cited paper.
+    
     Keyword arguments:
-    page - The user profile page
+    page - The user profile page.
+    h - The h-index, necessary to compute e-index.
     """
     citesList = parseDataForG(page)
     if len(citesList) > 0 :
@@ -255,11 +260,21 @@ def calculate_additional(page) :
         i100 = sum(1 for x in citesList if x >= 100)
         i1000 = sum(1 for x in citesList if x >= 1000)
         i10000 = sum(1 for x in citesList if x >= 10000)
+        e = calculate_e_index(citesList, h) if h <= 100 else 0
         for i in range(1, len(citesList)) :
             citesList[i] = citesList[i] + citesList[i-1]
         citesList = [ (i+1, x) for i, x in enumerate(citesList) ]
-        return max(y for y, x in citesList if x >= y*y), most, i100, i1000, i10000
-    return 0, 0, 0, 0, 0
+        return max(y for y, x in citesList if x >= y*y), most, i100, i1000, i10000, e
+    return 0, 0, 0, 0, 0, 0
+
+def calculate_e_index(citesList, h) :
+    """Calculates the e-index.
+
+    Keyword arguments:
+    citesList - List of citations of papers in decreasing order.
+    h - The h-index.
+    """
+    return math.sqrt(sum(citesList[i] for i in range(h)) - h*h)
     
 def parseDataForG(page) :
     """Parses the cites per publication for calculating g-index

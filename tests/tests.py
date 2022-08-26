@@ -26,7 +26,7 @@
 
 import unittest
 
-import sys
+import sys, math
 sys.path.insert(0,'src')
 import bibliometrics.bibliometrics as bib
 
@@ -35,6 +35,21 @@ class TestBibiometrics(unittest.TestCase) :
     # To have tests generate sample images (to files),
     # change this to True.
     printSampleImage = False
+
+    def test_calculate_e_no_excess(self) :
+        for h in range(0, 10) :
+            cites = [h]*h + [ h-1 if h > 0 else 0 ]*3
+            self.assertEqual(0.0, bib.calculate_e_index(cites, h))
+
+    def test_calculate_e_equal_excess(self) :
+        for h in range(0, 10) :
+            cites = [h+5]*h + [ h-1 if h > 0 else 0 ]*3
+            self.assertEqual(math.sqrt(5*h), bib.calculate_e_index(cites, h))
+
+    def test_calculate_e_unequal_excess(self) :
+        for h in range(0, 10) :
+            cites = [ h+x for x in range(h, 0, -1)] + [ h-1 if h > 0 else 0 ]*3
+            self.assertEqual(math.sqrt(h*(h+1)/2), bib.calculate_e_index(cites, h))
 
     def test_parse(self) :
         with open("tests/testcase.html.txt", "r") as f :
@@ -47,6 +62,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(44, metrics["g"])
             self.assertEqual(228, metrics["most"])
             self.assertEqual(3, metrics["i100"])
+            self.assertEqual("34.12", metrics["e"])
             self.assertFalse("i1000" in metrics)
             self.assertFalse("i10000" in metrics)
 
@@ -58,7 +74,8 @@ class TestBibiometrics(unittest.TestCase) :
             "i10" : 33,
             "i100" : 3,
             "g" : 44,
-            "most" : 228
+            "most" : 228,
+            "e" : "34.12"
         }
         colors = {
             "title" : "#58a6ff",
