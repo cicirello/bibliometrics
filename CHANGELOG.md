@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2022-08-26
 
 ### Added
-* Calculation of e-index provided the h-index is at most 100.
   
 ### Changed
 
@@ -18,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### CI/CD
+
+
+## [2.2.0] - 2022-08-26
+
+### Added
+* Calculation of e-index.
 
 
 ## [2.1.1] - 2022-08-01
