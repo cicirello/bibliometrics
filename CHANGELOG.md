@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2022-08-26
+## [Unreleased] - 2022-09-05
 
 ### Added
   
@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+* Reordered the bibliometrics, moving e-index to the last bibliometric, which looks better
+  since it is the only one of the bibliometrics that is a real-value, where the others are 
+  all integers.
 
 ### CI/CD
 
