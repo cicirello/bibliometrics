@@ -36,6 +36,14 @@ class TestBibiometrics(unittest.TestCase) :
     # change this to True.
     printSampleImage = False
 
+    def test_calculate_g(self) :
+        for g in range(1, 11) :
+            cites = [10]*g
+            self.assertEqual(g, bib.calculate_g_index(cites))
+        for g in range(11, 21) :
+            cites = [10]*g
+            self.assertEqual(10, bib.calculate_g_index(cites))
+
     def test_calculate_e_no_excess(self) :
         for h in range(0, 10) :
             cites = [h]*h + [ h-1 if h > 0 else 0 ]*3

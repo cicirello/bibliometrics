@@ -80,17 +80,30 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     drop = round(textSize * 12.5 / 14, 1)
     scholarLogoDimensions = 32
 
+    stat_labels = {
+        "total" : "Total citations",
+        "fiveYear" : "Five-year citations",
+        "most" : "Most-cited paper",
+        "h" : "h-index",
+        "g" : "g-index",
+        "i10" : "i10-index",
+        "i100" : "i100-index",
+        "i1000" : "i1000-index",
+        "i10000" : "i10000-index",
+        "e" : "e-index",
+    }
+
     stats = [
-        ("Total citations", "total"),
-        ("Five-year citations", "fiveYear"),
-        ("Most-cited paper", "most"),
-        ("h-index", "h"),
-        ("g-index", "g"),
-        ("i10-index", "i10"),
-        ("i100-index", "i100"),
-        ("i1000-index", "i1000"),
-        ("i10000-index", "i10000"),
-        ("e-index", "e")
+        "total",
+        "fiveYear",
+        "most",
+        "h",
+        "g",
+        "i10",
+        "i100",
+        "i1000",
+        "i10000",
+        "e"
     ]
 
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
@@ -99,8 +112,10 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     titleLength = round(calculateTextLength110Weighted(titleText, 600))
     minWidth = calculateTextLength(titleText, titleSize, True, 600) + 4*margin + 2*scholarLogoDimensions
     minWidth = max(minWidth, lastUpdatedLength + 2*margin)
-    for label, key in stats :
-        minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
+    for key in stats :
+        if key in metrics :
+            label = stat_labels[key]
+            minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
     minWidth = math.ceil(minWidth)
 
     minHeight = titleLineHeight + 2
@@ -118,8 +133,9 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     scale = round(0.75 * textSize / 110, 3)
 
     formattedStats = []
-    for label, key in stats :
+    for key in stats :
         if key in metrics :
+            label = stat_labels[key]
             offset += lineHeight
             minHeight += lineHeight
             data = str(metrics[key])
@@ -230,7 +246,8 @@ def parseBibliometrics(page) :
         return metrics
     i10 = page[startStat+1:endStat]
     metrics["i10"] = int(i10.strip())
-    g, most, i100, i1000, i10000, e = calculate_additional(page, metrics["h"])
+    cites_list = parse_cites_per_pub(page)
+    g, most, i100, i1000, i10000, e = calculate_additional(cites_list, metrics["h"])
     if g > 0 and g < 100 :
         metrics["g"] = g
     if most > 0 :
@@ -245,39 +262,49 @@ def parseBibliometrics(page) :
         metrics["e"] = "{0:.2f}".format(e)
     return metrics
 
-def calculate_additional(page, h) :
+def calculate_additional(cites_list, h) :
     """Calculates the g-index, e-index, i100-index, i1000-index, i10000-index,
     and the most cited paper.
     
     Keyword arguments:
-    page - The user profile page.
+    cites_list - A list of citation counts for each publication.
     h - The h-index, necessary to compute e-index.
     """
-    citesList = parseDataForG(page)
-    if len(citesList) > 0 :
-        citesList.sort(reverse=True)
-        most = citesList[0]
-        i100 = sum(1 for x in citesList if x >= 100)
-        i1000 = sum(1 for x in citesList if x >= 1000)
-        i10000 = sum(1 for x in citesList if x >= 10000)
-        e = calculate_e_index(citesList, h) if h <= 100 else 0
-        for i in range(1, len(citesList)) :
-            citesList[i] = citesList[i] + citesList[i-1]
-        citesList = [ (i+1, x) for i, x in enumerate(citesList) ]
-        return max(y for y, x in citesList if x >= y*y), most, i100, i1000, i10000, e
+    if len(cites_list) > 0 :
+        cites_list.sort(reverse=True)
+        most = cites_list[0]
+        i100 = sum(1 for x in cites_list if x >= 100)
+        i1000 = sum(1 for x in cites_list if x >= 1000)
+        i10000 = sum(1 for x in cites_list if x >= 10000)
+        e = calculate_e_index(cites_list, h) if h <= 100 else 0
+        g = calculate_g_index(cites_list)
+        return g, most, i100, i1000, i10000, e
     return 0, 0, 0, 0, 0, 0
 
-def calculate_e_index(citesList, h) :
+def calculate_g_index(cites_list) :
+    """Calculates the g-index.
+
+    Keyword arguments:
+    cites_list - List of citations of papers in decreasing order.
+    """
+    rolling_sum = [ cites_list[0] ]
+    for i in range(1, len(cites_list)) :
+        rolling_sum.append(cites_list[i] + rolling_sum[i-1])
+    rolling_sum = [ (i+1, x) for i, x in enumerate(rolling_sum) ]
+    return max(y for y, x in rolling_sum if x >= y*y)
+
+def calculate_e_index(cites_list, h) :
     """Calculates the e-index.
 
     Keyword arguments:
-    citesList - List of citations of papers in decreasing order.
+    cites_list - List of citations of papers in decreasing order.
     h - The h-index.
     """
-    return math.sqrt(sum(citesList[i] for i in range(h)) - h*h)
+    return math.sqrt(sum(cites_list[i] for i in range(h)) - h*h)
     
-def parseDataForG(page) :
-    """Parses the cites per publication for calculating g-index
+def parse_cites_per_pub(page) :
+    """Parses the cites per publication for calculating g-index,
+    e-index, i100-index, etc.
 
     Keyword arguments:
     page - The user profile page
@@ -406,6 +433,8 @@ def validateMetrics(metrics) :
         print("ERROR: Failed to parse i10-index.")
     if "g" not in metrics :
         print("WARNING: Failed to parse data needed to compute g-index.")
+    if "e" not in metrics :
+        print("WARNING: Failed to parse data needed to compute e-index.")
     if "most" not in metrics :
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
     if not valid :
