@@ -61,13 +61,16 @@ scholarLogoTemplate = """
 <svg x="{0}" y="{1}" width="{2}" height="{2}" viewBox="0 0 512 512"><path fill="#4285f4" d="M256 411.12L0 202.667 256 0z"/><path fill="#356ac3" d="M256 411.12l256-208.453L256 0z"/><circle fill="#a0c3ff" cx="256" cy="362.667" r="149.333"/><path fill="#76a7fa" d="M121.037 298.667c23.968-50.453 75.392-85.334 134.963-85.334s110.995 34.881 134.963 85.334H121.037z"/></svg>
 """
 
-def generateBibliometricsImage(metrics, colors, titleText) :
+def generateBibliometricsImage(metrics, colors, titleText, stats) :
     """Generates the bibliometrics image as an SVG.
 
     Keyword arguments:
     metrics - dictionary with the stats
     colors - dictionary with colors
+    titleText - text for the title of the svg
+    stats - a list of the keys of the metrics to include in the order to include them
     """
+    stats = [ key for key in stats if key in metrics ]
     titleSize = 18
     titleLineHeight = 2 * titleSize + 1
     textSize = 14
@@ -93,19 +96,6 @@ def generateBibliometricsImage(metrics, colors, titleText) :
         "e" : "e-index",
     }
 
-    stats = [
-        "total",
-        "fiveYear",
-        "most",
-        "h",
-        "g",
-        "i10",
-        "i100",
-        "i1000",
-        "i10000",
-        "e"
-    ]
-
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
     lastUpdatedLength = calculateTextLength(lastUpdatedText, smallSize, True, 600)
     
@@ -113,9 +103,8 @@ def generateBibliometricsImage(metrics, colors, titleText) :
     minWidth = calculateTextLength(titleText, titleSize, True, 600) + 4*margin + 2*scholarLogoDimensions
     minWidth = max(minWidth, lastUpdatedLength + 2*margin)
     for key in stats :
-        if key in metrics :
-            label = stat_labels[key]
-            minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
+        label = stat_labels[key]
+        minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
     minWidth = math.ceil(minWidth)
 
     minHeight = titleLineHeight + 2
@@ -134,25 +123,24 @@ def generateBibliometricsImage(metrics, colors, titleText) :
 
     formattedStats = []
     for key in stats :
-        if key in metrics :
-            label = stat_labels[key]
-            offset += lineHeight
-            minHeight += lineHeight
-            data = str(metrics[key])
-            dataWidthPreScale = round(calculateTextLength110Weighted(data, 600))
-            entry = metricTemplate.format(
-                margin,
-                offset,
-                scale,
-                round(calculateTextLength110Weighted(label, 600)),
-                0,
-                round(drop/scale),
-                label,
-                dataWidthPreScale,
-                round((minWidth - 2*margin)/scale) - dataWidthPreScale,   #round(minWidth/2/scale),
-                data
-            )
-            formattedStats.append(entry)
+        label = stat_labels[key]
+        offset += lineHeight
+        minHeight += lineHeight
+        data = str(metrics[key])
+        dataWidthPreScale = round(calculateTextLength110Weighted(data, 600))
+        entry = metricTemplate.format(
+            margin,
+            offset,
+            scale,
+            round(calculateTextLength110Weighted(label, 600)),
+            0,
+            round(drop/scale),
+            label,
+            dataWidthPreScale,
+            round((minWidth - 2*margin)/scale) - dataWidthPreScale,   #round(minWidth/2/scale),
+            data
+        )
+        formattedStats.append(entry)
 
     scale = round(0.75 * smallSize / 110, 3)
 
@@ -463,6 +451,19 @@ def main() :
     metrics = parseBibliometrics(page)
     validateMetrics(metrics)
 
+    stats = [
+        "total",
+        "fiveYear",
+        "most",
+        "h",
+        "g",
+        "i10",
+        "i100",
+        "i1000",
+        "i10000",
+        "e"
+    ]
+
     if previousMetrics != metrics :
         if "jsonOutputFile" in configuration :
             outputJSON(configuration["jsonOutputFile"], metrics)
@@ -471,6 +472,7 @@ def main() :
             image = generateBibliometricsImage(
                 metrics,
                 colors,
-                "Bibliometrics"
+                "Bibliometrics",
+                stats
             )
             outputImage(image, colors["filename"])

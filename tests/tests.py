@@ -85,6 +85,18 @@ class TestBibiometrics(unittest.TestCase) :
             "most" : 228,
             "e" : "34.12"
         }
+        stats = [
+            "total",
+            "fiveYear",
+            "most",
+            "h",
+            "g",
+            "i10",
+            "i100",
+            "i1000",
+            "i10000",
+            "e"
+        ]
         colors = {
             "title" : "#58a6ff",
             "border" : "rgba(56,139,253,0.4)",
@@ -94,7 +106,8 @@ class TestBibiometrics(unittest.TestCase) :
         image = bib.generateBibliometricsImage(
             metrics,
             colors,
-            "Bibliometrics"
+            "Bibliometrics",
+            stats
         )
         colors2 = {
             "background": "#f6f8fa",
@@ -105,7 +118,8 @@ class TestBibiometrics(unittest.TestCase) :
         image2 = bib.generateBibliometricsImage(
             metrics,
             colors2,
-            "Bibliometrics"
+            "Bibliometrics",
+            stats
         )
         if TestBibiometrics.printSampleImage :
             bib.outputImage(image, "images/bibliometrics2.svg")
