@@ -451,6 +451,7 @@ def main() :
     metrics = parseBibliometrics(page)
     validateMetrics(metrics)
 
+    # default metrics in default order
     stats = [
         "total",
         "fiveYear",
@@ -464,6 +465,10 @@ def main() :
         "e"
     ]
 
+    # check if user-specified metrics order for all SVGs
+    if "include" in configuration :
+        stats = configuration["include"]
+
     if previousMetrics != metrics :
         if "jsonOutputFile" in configuration :
             outputJSON(configuration["jsonOutputFile"], metrics)
@@ -473,6 +478,6 @@ def main() :
                 metrics,
                 colors,
                 "Bibliometrics",
-                stats
+                colors["include"] if "include" in colors else stats
             )
             outputImage(image, colors["filename"])
