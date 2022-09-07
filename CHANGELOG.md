@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2022-09-07
 
 ### Added
-* User-configurable ordering of the bibliometrics.
-* User-configurable exclusions (e.g., if user wishes to exclude one or more of the bibliometrics).
   
 ### Changed
 
@@ -17,11 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
-* Reordered the bibliometrics, moving e-index to the last bibliometric, which looks better
-  since it is the only one of the bibliometrics that is a real-value, where the others are 
-  all integers.
 
 ### CI/CD
+
+
+## [2.3.0] - 2022-09-07
+
+### Added
+* User-configurable ordering of the bibliometrics.
+* User-configurable exclusions (e.g., if user wishes to exclude one or more of the bibliometrics).
+
+### Fixed
+* Changed the default order of the bibliometrics, moving e-index to the last bibliometric, to
+  improve the appearance since it is the only one of the bibliometrics that is a real-value, 
+  where the others are all integers.
 
 
 ## [2.2.0] - 2022-08-26
