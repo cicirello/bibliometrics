@@ -13,8 +13,9 @@ This command line utility does the following:
 * computes your g-index provided if it is less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
 * computes your i100-index, i1000-index, and i10000-index ([doi:10.1007/s11192-020-03831-9](https://doi.org/10.1007/s11192-020-03831-9)), hiding any that are 0, and provided they are less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
 * computes your e-index ([https://doi.org/10.1371/journal.pone.0005429](https://doi.org/10.1371/journal.pone.0005429)) provided that your h-index is at most 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
-* generates a JSON file summarizing these bibliometrics; and
-* generates one or more SVG images summarizing these bibliometrics.
+* generates a JSON file summarizing these bibliometrics;
+* generates one or more SVG images summarizing these bibliometrics; and
+* includes all bibliometrics that are non-zero by default, but enables user-configurable list of bibliometrics.
 
 The intention of this utility is as a tool for a researcher to generate an SVG of their own 
 bibliometrics only. For example, I am using it to generate and update such an SVG for my own
@@ -78,13 +79,21 @@ at the root of this repository: [.bibliometrics.config.json](https://github.com/
 To generate the JSON summary of your bibliometrics, specify the filename (optionally with path)
 via the `"jsonOutputFile"` field. If this field is not present, then no JSON file will be generated.
 
+To change the order that the bibliometrics appear in the SVG, or to explicitly exclude one or more
+bibliometrics, you can use the `"include"` field. This field is an array of keys associated with the
+various bibliometrics. If this field is not present, then the following default order is 
+used: `[ "total", "fiveYear", "most", "h", "g", "i10", "i100", "i1000", "i10000", "e" ]`. There is no
+reason to use this field if the only thing you want to do is to exclude bibliometrics that have the
+value 0. Such bibliometrics will be excluded by default.
+
 The `"svgConfig"` field is an array of JSON objects, such that each object configures one SVG. Each
 of the JSON objects in this array includes the following fields:
-* `"filename"` is the filename (optionally with path) to the target svg file.
+* `"filename"` is the filename (optionally with path) to the target SVG file.
 * `"background"` is the background color.
 * `"border"` is the border color.
 * `"title"` is the title color.
 * `"text"` is the color of the rest of the text.
+* `"include"` is similar to the top-level field of the same name, but applies only to one SVG, whereas the top-level field applies to all. If both the top-level `"include"` field and the more specific field by the same name are used, then the top-level `"include"` overrides the default, and the individual SVG's `"include"` in turn overrides the top-level `"include"`.
 
 The colors can be defined in any format that is valid within an SVG. For example, you can specify
 RGB, two hex digits for each color channel, with `#010409`; or RGB with one hex digit for each color 
@@ -92,7 +101,7 @@ channel, `#123`. You can also use SVG named colors, such as `white`, as well as 
 `rgba(56,139,253,0.4)`. If it is valid as a color in SVG, then it should work. The utility simply inserts
 it for the relevant color within the SVG without validation.
 
-Here is a sample `.bibliometrics.config.json`:
+Here is a sample `.bibliometrics.config.json` (using the default order of the bibliometrics):
 
 ```JSON
 {
@@ -104,6 +113,41 @@ Here is a sample `.bibliometrics.config.json`:
             "filename": "images/bibliometrics2.svg",
             "text": "#c9d1d9",
             "title": "#58a6ff"
+        },
+        {
+            "background": "#f6f8fa",
+            "border": "rgba(84,174,255,0.4)",
+            "filename": "images/bibliometrics.svg",
+            "text": "#24292f",
+            "title": "#0969da"
+        }
+    ]
+}
+```
+
+Here is another sample that generates three SVGs, overriding the default order at the top-level to exclude the 
+i10-index (and related indexes), and then overriding it again for one of the three SVGs to additionally exclude
+the g-index and e-index:
+
+```JSON
+{
+    "jsonOutputFile": "bibliometrics.json",
+    "include": ["total", "fiveYear", "most", "h", "g", "e"],
+    "svgConfig": [
+        {
+            "background": "#010409",
+            "border": "rgba(56,139,253,0.4)",
+            "filename": "images/bibliometrics3.svg",
+            "text": "#c9d1d9",
+            "title": "#58a6ff"
+        },
+        {
+            "background": "#010409",
+            "border": "rgba(56,139,253,0.4)",
+            "filename": "images/bibliometrics2.svg",
+            "text": "#c9d1d9",
+            "title": "#58a6ff",
+            "include": ["total", "fiveYear", "most", "h"]
         },
         {
             "background": "#f6f8fa",
