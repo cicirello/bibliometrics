@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### CI/CD
 * Revised GitHub Actions workflow for matrix testing Python versions 3.8 through 3.12
+* Bump Python to 3.12 in deployment workflow
 
 
 ## [2.3.0] - 2022-09-07
