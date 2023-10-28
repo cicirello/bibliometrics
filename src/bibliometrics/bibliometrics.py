@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022 Vincent A Cicirello
+# Copyright (c) 2022-2023 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
@@ -68,7 +68,8 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
     metrics - dictionary with the stats
     colors - dictionary with colors
     titleText - text for the title of the svg
-    stats - a list of the keys of the metrics to include in the order to include them
+    stats - a list of the keys of the metrics to include in the order to
+        include them
     """
     stats = [ key for key in stats if key in metrics ]
     titleSize = 18
@@ -94,17 +95,30 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "i1000" : "i1000-index",
         "i10000" : "i10000-index",
         "e" : "e-index",
+        "R" : "R-index"
     }
 
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
-    lastUpdatedLength = calculateTextLength(lastUpdatedText, smallSize, True, 600)
+    lastUpdatedLength = calculateTextLength(
+        lastUpdatedText,
+        smallSize,
+        True,
+        600
+    )
     
     titleLength = round(calculateTextLength110Weighted(titleText, 600))
-    minWidth = calculateTextLength(titleText, titleSize, True, 600) + 4*margin + 2*scholarLogoDimensions
+    minWidth = calculateTextLength(
+        titleText,
+        titleSize,
+        True,
+        600) + 4*margin + 2*scholarLogoDimensions
     minWidth = max(minWidth, lastUpdatedLength + 2*margin)
     for key in stats :
         label = stat_labels[key]
-        minWidth = max(minWidth, 2 * calculateTextLength(label, textSize, True, 600) + 2*margin)
+        minWidth = max(
+            minWidth,
+            2 * calculateTextLength(label, textSize, True, 600) + 2*margin
+        )
     minWidth = math.ceil(minWidth)
 
     minHeight = titleLineHeight + 2
@@ -171,12 +185,15 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         ''.join(formattedStats), #10
         lastUpdated, #11
         scholarLogoTemplate.format(margin, margin, scholarLogoDimensions),  #12
-        scholarLogoTemplate.format(minWidth - margin - scholarLogoDimensions, margin, scholarLogoDimensions)  #13
+        scholarLogoTemplate.format(
+            minWidth - margin - scholarLogoDimensions,
+            margin,
+            scholarLogoDimensions)  #13
     )
     return image.replace("\n", "")
 
-def parseBibliometrics(page) :
-    """Parses a Scholar Profile for the bibliometrics.
+def scrapePage(page) :
+    """Scrapes some bibliometrics from the scholar profile page.
 
     Keyword arguments:
     page - The user profile page
@@ -234,40 +251,58 @@ def parseBibliometrics(page) :
         return metrics
     i10 = page[startStat+1:endStat]
     metrics["i10"] = int(i10.strip())
+    return metrics
+    
+def parseBibliometrics(page) :
+    """Parses a Scholar Profile for the bibliometrics.
+
+    Keyword arguments:
+    page - The user profile page
+    """
+    metrics = scrapePage(page)
+    if "h" not in metrics :
+        return metrics
+    h = metrics["h"]
     cites_list = parse_cites_per_pub(page)
-    g, most, i100, i1000, i10000, e = calculate_additional(cites_list, metrics["h"])
-    if g > 0 and g < 100 :
-        metrics["g"] = g
+    if len(cites_list) == 0 :
+        return metrics
+
+    cites_list.sort(reverse=True)
+    most = cites_list[0]
     if most > 0 :
         metrics["most"] = most
+    g = calculate_g_index(cites_list)
+    if g > 0 and g < 100 :
+        metrics["g"] = g
+    h_core_sum = calculate_h_core_citations(cites_list, h) if h <= 100 else 0
+    e = calculate_e_index(h_core_sum, h) if h <= 100 else 0
+    if e > 0.0 :
+        metrics["e"] = "{0:.2f}".format(e)
+    R = calculate_R_index(h_core_sum) if h <= 100 else 0
+    if R > 0.0 :
+        metrics["R"] = "{0:.2f}".format(R)
+
+    i100 = sum(1 for x in cites_list if x >= 100)
+    i1000 = sum(1 for x in cites_list if x >= 1000)
+    i10000 = sum(1 for x in cites_list if x >= 10000)
     if i100 > 0 and i100 < 100 :
         metrics["i100"] = i100
     if i1000 > 0 and i1000 < 100 :
         metrics["i1000"] = i1000
     if i10000 > 0 and i10000 < 100 :
         metrics["i10000"] = i10000
-    if e > 0.0 :
-        metrics["e"] = "{0:.2f}".format(e)
+    
     return metrics
 
-def calculate_additional(cites_list, h) :
-    """Calculates the g-index, e-index, i100-index, i1000-index, i10000-index,
-    and the most cited paper.
-    
+def calculate_h_core_citations(cites_list, h) :
+    """Calculates the total number of citations to the publications
+    in the h-core, i.e., the h most-cited papers.
+
     Keyword arguments:
-    cites_list - A list of citation counts for each publication.
-    h - The h-index, necessary to compute e-index.
+    cites_list - List of citations of papers in decreasing order.
+    h - The h-index.
     """
-    if len(cites_list) > 0 :
-        cites_list.sort(reverse=True)
-        most = cites_list[0]
-        i100 = sum(1 for x in cites_list if x >= 100)
-        i1000 = sum(1 for x in cites_list if x >= 1000)
-        i10000 = sum(1 for x in cites_list if x >= 10000)
-        e = calculate_e_index(cites_list, h) if h <= 100 else 0
-        g = calculate_g_index(cites_list)
-        return g, most, i100, i1000, i10000, e
-    return 0, 0, 0, 0, 0, 0
+    return sum(cites_list[i] for i in range(h))
 
 def calculate_g_index(cites_list) :
     """Calculates the g-index.
@@ -281,14 +316,22 @@ def calculate_g_index(cites_list) :
     rolling_sum = [ (i+1, x) for i, x in enumerate(rolling_sum) ]
     return max(y for y, x in rolling_sum if x >= y*y)
 
-def calculate_e_index(cites_list, h) :
+def calculate_R_index(h_core_sum) :
+    """Calculates the R-index.
+
+    Keyword arguments:
+    h_core_sum - sum of the citations to the h publications in the h-core.
+    """
+    return math.sqrt(h_core_sum)
+    
+def calculate_e_index(h_core_sum, h) :
     """Calculates the e-index.
 
     Keyword arguments:
-    cites_list - List of citations of papers in decreasing order.
+    h_core_sum - sum of the citations to the h publications in the h-core.
     h - The h-index.
     """
-    return math.sqrt(sum(cites_list[i] for i in range(h)) - h*h)
+    return math.sqrt(h_core_sum - h*h)
     
 def parse_cites_per_pub(page) :
     """Parses the cites per publication for calculating g-index,
@@ -423,6 +466,8 @@ def validateMetrics(metrics) :
         print("WARNING: Failed to parse data needed to compute g-index.")
     if "e" not in metrics :
         print("WARNING: Failed to parse data needed to compute e-index.")
+    if "R" not in metrics :
+        print("WARNING: Failed to parse data needed to compute R-index.")
     if "most" not in metrics :
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
     if not valid :
@@ -433,7 +478,8 @@ def main() :
     """Entry point for the utility."""
     configuration = getConfiguration(".bibliometrics.config.json")
 
-    previousMetrics = readPreviousBibliometrics(configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
+    previousMetrics = readPreviousBibliometrics(
+        configuration["jsonOutputFile"]) if "jsonOutputFile" in configuration else None
 
     scholarID = os.environ["SCHOLAR_ID"] if "SCHOLAR_ID" in os.environ else None
     if scholarID == None :
@@ -462,7 +508,8 @@ def main() :
         "i100",
         "i1000",
         "i10000",
-        "e"
+        "e",
+        "R"
     ]
 
     # check if user-specified metrics order for all SVGs

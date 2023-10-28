@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022 Vincent A Cicirello
+# Copyright (c) 2022-2023 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
@@ -36,6 +36,12 @@ class TestBibiometrics(unittest.TestCase) :
     # change this to True.
     printSampleImage = False
 
+    def test_calculate_h_core_citations(self):
+        cites = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        for h in range(1, 1+len(cites)):
+            expected = 55 - (10-h)*(11-h)//2
+            self.assertEqual(expected, bib.calculate_h_core_citations(cites, h))
+
     def test_calculate_g(self) :
         for g in range(1, 11) :
             cites = [10]*g
@@ -46,19 +52,25 @@ class TestBibiometrics(unittest.TestCase) :
 
     def test_calculate_e_no_excess(self) :
         for h in range(0, 10) :
-            cites = [h]*h + [ h-1 if h > 0 else 0 ]*3
-            self.assertEqual(0.0, bib.calculate_e_index(cites, h))
+            h_core_sum = h*h
+            self.assertEqual(0.0, bib.calculate_e_index(h_core_sum, h))
 
     def test_calculate_e_equal_excess(self) :
         for h in range(0, 10) :
-            cites = [h+5]*h + [ h-1 if h > 0 else 0 ]*3
-            self.assertEqual(math.sqrt(5*h), bib.calculate_e_index(cites, h))
+            h_core_sum = h*h + 5*h
+            self.assertEqual(math.sqrt(5*h), bib.calculate_e_index(h_core_sum, h))
 
     def test_calculate_e_unequal_excess(self) :
         for h in range(0, 10) :
-            cites = [ h+x for x in range(h, 0, -1)] + [ h-1 if h > 0 else 0 ]*3
-            self.assertEqual(math.sqrt(h*(h+1)/2), bib.calculate_e_index(cites, h))
+            h_core_sum = sum(h+x for x in range(h, 0, -1))
+            self.assertEqual(math.sqrt(h*(h+1)/2), bib.calculate_e_index(h_core_sum, h))
 
+    def test_calculate_R_index(self):
+        inputs = [100, 81, 64, 4, 1, 0]
+        outputs = [10, 9, 8, 2, 1, 0]
+        for h_core_sum, expected in zip(inputs, outputs):
+            self.assertEqual(expected, bib.calculate_R_index(h_core_sum))
+        
     def test_parse(self) :
         with open("tests/testcase.html.txt", "r") as f :
             page = f.read().replace('\n', '')
@@ -71,6 +83,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(228, metrics["most"])
             self.assertEqual(3, metrics["i100"])
             self.assertEqual("34.12", metrics["e"])
+            self.assertEqual("42.30", metrics["R"])
             self.assertFalse("i1000" in metrics)
             self.assertFalse("i10000" in metrics)
 
@@ -83,7 +96,8 @@ class TestBibiometrics(unittest.TestCase) :
             "i100" : 3,
             "g" : 44,
             "most" : 228,
-            "e" : "34.12"
+            "e" : "34.12",
+            "R" : "42.30"
         }
         stats = [
             "total",
@@ -95,7 +109,8 @@ class TestBibiometrics(unittest.TestCase) :
             "i100",
             "i1000",
             "i10000",
-            "e"
+            "e",
+            "R"
         ]
         colors = {
             "title" : "#58a6ff",
