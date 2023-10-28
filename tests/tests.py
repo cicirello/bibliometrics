@@ -36,6 +36,12 @@ class TestBibiometrics(unittest.TestCase) :
     # change this to True.
     printSampleImage = False
 
+    def test_calculate_h_core_citations(self):
+        cites = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        for h in range(1, 1+len(cites)):
+            expected = 55 - (10-h)*(11-h)//2
+            self.assertEqual(expected, bib.calculate_h_core_citations(cites, h))
+
     def test_calculate_g(self) :
         for g in range(1, 11) :
             cites = [10]*g
@@ -46,18 +52,18 @@ class TestBibiometrics(unittest.TestCase) :
 
     def test_calculate_e_no_excess(self) :
         for h in range(0, 10) :
-            cites = [h]*h + [ h-1 if h > 0 else 0 ]*3
-            self.assertEqual(0.0, bib.calculate_e_index(cites, h))
+            h_core_sum = h*h
+            self.assertEqual(0.0, bib.calculate_e_index(h_core_sum, h))
 
     def test_calculate_e_equal_excess(self) :
         for h in range(0, 10) :
-            cites = [h+5]*h + [ h-1 if h > 0 else 0 ]*3
-            self.assertEqual(math.sqrt(5*h), bib.calculate_e_index(cites, h))
+            h_core_sum = h*h + 5*h
+            self.assertEqual(math.sqrt(5*h), bib.calculate_e_index(h_core_sum, h))
 
     def test_calculate_e_unequal_excess(self) :
         for h in range(0, 10) :
-            cites = [ h+x for x in range(h, 0, -1)] + [ h-1 if h > 0 else 0 ]*3
-            self.assertEqual(math.sqrt(h*(h+1)/2), bib.calculate_e_index(cites, h))
+            h_core_sum = sum(h+x for x in range(h, 0, -1))
+            self.assertEqual(math.sqrt(h*(h+1)/2), bib.calculate_e_index(h_core_sum, h))
 
     def test_parse(self) :
         with open("tests/testcase.html.txt", "r") as f :
