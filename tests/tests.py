@@ -105,7 +105,8 @@ class TestBibiometrics(unittest.TestCase) :
             "g" : 44,
             "most" : 228,
             "e" : "34.12",
-            "R" : "42.30"
+            "R" : "42.30",
+            "A" : "71.56"
         }
         stats = [
             "total",
@@ -118,7 +119,8 @@ class TestBibiometrics(unittest.TestCase) :
             "i1000",
             "i10000",
             "e",
-            "R"
+            "R",
+            "A"
         ]
         colors = {
             "title" : "#58a6ff",
