@@ -278,6 +278,9 @@ def parseBibliometrics(page) :
     e = calculate_e_index(h_core_sum, h) if h <= 100 else 0
     if e > 0.0 :
         metrics["e"] = "{0:.2f}".format(e)
+    R = calculate_R_index(h_core_sum)
+    if R > 0.0 :
+        metrics["R"] = "{0:.2f}".format(R)
 
     i100 = sum(1 for x in cites_list if x >= 100)
     i1000 = sum(1 for x in cites_list if x >= 1000)
@@ -313,6 +316,14 @@ def calculate_g_index(cites_list) :
     rolling_sum = [ (i+1, x) for i, x in enumerate(rolling_sum) ]
     return max(y for y, x in rolling_sum if x >= y*y)
 
+def calculate_R_index(h_core_sum) :
+    """Calculates the R-index.
+
+    Keyword arguments:
+    h_core_sum - sum of the citations to the h publications in the h-core.
+    """
+    return math.sqrt(h_core_sum)
+    
 def calculate_e_index(h_core_sum, h) :
     """Calculates the e-index.
 
@@ -455,6 +466,8 @@ def validateMetrics(metrics) :
         print("WARNING: Failed to parse data needed to compute g-index.")
     if "e" not in metrics :
         print("WARNING: Failed to parse data needed to compute e-index.")
+    if "R" not in metrics :
+        print("WARNING: Failed to parse data needed to compute R-index.")
     if "most" not in metrics :
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
     if not valid :
@@ -495,7 +508,8 @@ def main() :
         "i100",
         "i1000",
         "i10000",
-        "e"
+        "e",
+        "R"
     ]
 
     # check if user-specified metrics order for all SVGs
