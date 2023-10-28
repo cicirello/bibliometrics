@@ -274,11 +274,11 @@ def parseBibliometrics(page) :
     g = calculate_g_index(cites_list)
     if g > 0 and g < 100 :
         metrics["g"] = g
-    h_core_sum = calculate_h_core_citations(cites_list, h)
+    h_core_sum = calculate_h_core_citations(cites_list, h) if h <= 100 else 0
     e = calculate_e_index(h_core_sum, h) if h <= 100 else 0
     if e > 0.0 :
         metrics["e"] = "{0:.2f}".format(e)
-    R = calculate_R_index(h_core_sum)
+    R = calculate_R_index(h_core_sum) if h <= 100 else 0
     if R > 0.0 :
         metrics["R"] = "{0:.2f}".format(R)
 
