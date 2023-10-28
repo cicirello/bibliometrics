@@ -95,7 +95,8 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "i1000" : "i1000-index",
         "i10000" : "i10000-index",
         "e" : "e-index",
-        "R" : "R-index"
+        "R" : "R-index",
+        "A" : "A-index"
     }
 
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
@@ -281,6 +282,9 @@ def parseBibliometrics(page) :
     R = calculate_R_index(h_core_sum) if h <= 100 else 0
     if R > 0.0 :
         metrics["R"] = "{0:.2f}".format(R)
+    A = calculate_A_index(h_core_sum, h) if h <= 100 else 0
+    if A > 0.0 :
+        metrics["A"] = "{0:.2f}".format(A)
 
     i100 = sum(1 for x in cites_list if x >= 100)
     i1000 = sum(1 for x in cites_list if x >= 1000)
@@ -323,6 +327,15 @@ def calculate_R_index(h_core_sum) :
     h_core_sum - sum of the citations to the h publications in the h-core.
     """
     return math.sqrt(h_core_sum)
+
+def calculate_A_index(h_core_sum, h) :
+    """Calculates the A-index.
+
+    Keyword arguments:
+    h_core_sum - sum of the citations to the h publications in the h-core.
+    h - The h-index.
+    """
+    return h_core_sum / h if h > 0 else 0
     
 def calculate_e_index(h_core_sum, h) :
     """Calculates the e-index.
@@ -468,6 +481,8 @@ def validateMetrics(metrics) :
         print("WARNING: Failed to parse data needed to compute e-index.")
     if "R" not in metrics :
         print("WARNING: Failed to parse data needed to compute R-index.")
+    if "A" not in metrics :
+        print("WARNING: Failed to parse data needed to compute A-index.")
     if "most" not in metrics :
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
     if not valid :
@@ -509,7 +524,8 @@ def main() :
         "i1000",
         "i10000",
         "e",
-        "R"
+        "R",
+        "A"
     ]
 
     # check if user-specified metrics order for all SVGs

@@ -70,6 +70,13 @@ class TestBibiometrics(unittest.TestCase) :
         outputs = [10, 9, 8, 2, 1, 0]
         for h_core_sum, expected in zip(inputs, outputs):
             self.assertEqual(expected, bib.calculate_R_index(h_core_sum))
+
+    def test_calculate_A_index(self):
+        h_core_sum = 100
+        inputs = [1, 2, 4, 5, 20, 25, 50, 100]
+        outputs = [100, 50, 25, 20, 5, 4, 2, 1]
+        for h, expected in zip(inputs, outputs):
+            self.assertEqual(expected, bib.calculate_A_index(h_core_sum, h))
         
     def test_parse(self) :
         with open("tests/testcase.html.txt", "r") as f :
@@ -84,6 +91,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(3, metrics["i100"])
             self.assertEqual("34.12", metrics["e"])
             self.assertEqual("42.30", metrics["R"])
+            self.assertEqual("71.56", metrics["A"])
             self.assertFalse("i1000" in metrics)
             self.assertFalse("i10000" in metrics)
 
@@ -97,7 +105,8 @@ class TestBibiometrics(unittest.TestCase) :
             "g" : 44,
             "most" : 228,
             "e" : "34.12",
-            "R" : "42.30"
+            "R" : "42.30",
+            "A" : "71.56"
         }
         stats = [
             "total",
@@ -110,7 +119,8 @@ class TestBibiometrics(unittest.TestCase) :
             "i1000",
             "i10000",
             "e",
-            "R"
+            "R",
+            "A"
         ]
         colors = {
             "title" : "#58a6ff",
