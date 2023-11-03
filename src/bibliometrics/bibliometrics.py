@@ -85,18 +85,18 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
     scholarLogoDimensions = 32
 
     stat_labels = {
-        "total" : "Total citations",
-        "fiveYear" : "Five-year citations",
-        "most" : "Most-cited paper",
-        "h" : "h-index",
-        "g" : "g-index",
-        "i10" : "i10-index",
-        "i100" : "i100-index",
-        "i1000" : "i1000-index",
-        "i10000" : "i10000-index",
-        "e" : "e-index",
-        "R" : "R-index",
-        "A" : "A-index"
+        "total-cites" : "Total citations",
+        "five-year-cites" : "Five-year citations",
+        "most-cited" : "Most-cited paper",
+        "h-index" : "h-index",
+        "g-index" : "g-index",
+        "i10-index" : "i10-index",
+        "i100-index" : "i100-index",
+        "i1000-index" : "i1000-index",
+        "i10000-index" : "i10000-index",
+        "e-index" : "e-index",
+        "r-index" : "R-index",
+        "a-index" : "A-index"
     }
 
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
@@ -211,7 +211,7 @@ def scrapePage(page) :
     if startStat < 0 :
         return metrics
     totalCitations = page[startStat+1:endStat]
-    metrics["total"] = int(totalCitations.strip())
+    metrics["total-cites"] = int(totalCitations.strip())
     i = endStat + 6
     endStat = page.find("</td>", i)
     if endStat < 0 :
@@ -221,7 +221,7 @@ def scrapePage(page) :
     if startStat < 0 :
         return metrics
     fiveYearCitations = page[startStat+1:endStat]
-    metrics["fiveYear"] = int(fiveYearCitations.strip())
+    metrics["five-year-cites"] = int(fiveYearCitations.strip())
     i = endStat + 6
     i = page.find("</td>", i+1)
     if i < 0 :
@@ -234,7 +234,7 @@ def scrapePage(page) :
     if startStat < 0 :
         return metrics
     h = page[startStat+1:endStat]
-    metrics["h"] = int(h.strip())
+    metrics["h-index"] = int(h.strip())
     i = endStat + 6
     i = page.find("</td>", i+1)
     if i < 0 :
@@ -251,7 +251,7 @@ def scrapePage(page) :
     if startStat < 0 :
         return metrics
     i10 = page[startStat+1:endStat]
-    metrics["i10"] = int(i10.strip())
+    metrics["i10-index"] = int(i10.strip())
     return metrics
     
 def parseBibliometrics(page) :
@@ -261,9 +261,9 @@ def parseBibliometrics(page) :
     page - The user profile page
     """
     metrics = scrapePage(page)
-    if "h" not in metrics :
+    if "h-index" not in metrics :
         return metrics
-    h = metrics["h"]
+    h = metrics["h-index"]
     cites_list = parse_cites_per_pub(page)
     if len(cites_list) == 0 :
         return metrics
@@ -271,30 +271,30 @@ def parseBibliometrics(page) :
     cites_list.sort(reverse=True)
     most = cites_list[0]
     if most > 0 :
-        metrics["most"] = most
+        metrics["most-cited"] = most
     g = calculate_g_index(cites_list)
     if g > 0 and g < 100 :
-        metrics["g"] = g
+        metrics["g-index"] = g
     h_core_sum = calculate_h_core_citations(cites_list, h) if h <= 100 else 0
     e = calculate_e_index(h_core_sum, h) if h <= 100 else 0
     if e > 0.0 :
-        metrics["e"] = "{0:.2f}".format(e)
+        metrics["e-index"] = "{0:.2f}".format(e)
     R = calculate_R_index(h_core_sum) if h <= 100 else 0
     if R > 0.0 :
-        metrics["R"] = "{0:.2f}".format(R)
+        metrics["r-index"] = "{0:.2f}".format(R)
     A = calculate_A_index(h_core_sum, h) if h <= 100 else 0
     if A > 0.0 :
-        metrics["A"] = "{0:.2f}".format(A)
+        metrics["a-index"] = "{0:.2f}".format(A)
 
     i100 = sum(1 for x in cites_list if x >= 100)
     i1000 = sum(1 for x in cites_list if x >= 1000)
     i10000 = sum(1 for x in cites_list if x >= 10000)
     if i100 > 0 and i100 < 100 :
-        metrics["i100"] = i100
+        metrics["i100-index"] = i100
     if i1000 > 0 and i1000 < 100 :
-        metrics["i1000"] = i1000
+        metrics["i1000-index"] = i1000
     if i10000 > 0 and i10000 < 100 :
-        metrics["i10000"] = i10000
+        metrics["i10000-index"] = i10000
     
     return metrics
 
@@ -463,27 +463,27 @@ def validateMetrics(metrics) :
     metrics - The parsed and computed bibliometrics
     """
     valid = True
-    if "total" not in metrics :
+    if "total-cites" not in metrics :
         valid = False
         print("ERROR: Failed to parse total citations.")
-    if "fiveYear" not in metrics :
+    if "five-year-cites" not in metrics :
         valid = False
         print("ERROR: Failed to parse five-year citations.")
-    if "h" not in metrics :
+    if "h-index" not in metrics :
         valid = False
         print("ERROR: Failed to parse h-index.")
-    if "i10" not in metrics :
+    if "i10-index" not in metrics :
         valid = False
         print("ERROR: Failed to parse i10-index.")
-    if "g" not in metrics :
+    if "g-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute g-index.")
-    if "e" not in metrics :
+    if "e-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute e-index.")
-    if "R" not in metrics :
+    if "r-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute R-index.")
-    if "A" not in metrics :
+    if "a-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute A-index.")
-    if "most" not in metrics :
+    if "most-cited" not in metrics :
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
     if not valid :
         print("Exiting....")
@@ -514,33 +514,36 @@ def main() :
 
     # default metrics in default order
     stats = [
-        "total",
-        "fiveYear",
-        "most",
-        "h",
-        "g",
-        "i10",
-        "i100",
-        "i1000",
-        "i10000",
-        "e",
-        "R",
-        "A"
+        "total-cites",
+        "five-year-cites",
+        "most-cited",
+        "h-index",
+        "g-index",
+        "i10-index",
+        "i100-index",
+        "i1000-index",
+        "i10000-index",
+        "e-index",
+        "r-index",
+        "a-index"
     ]
 
     # check if user-specified metrics order for all SVGs
     if "include" in configuration :
-        stats = configuration["include"]
+        stats = [ key.lower() for key in configuration["include"] ]
 
     if previousMetrics != metrics :
         if "jsonOutputFile" in configuration :
             outputJSON(configuration["jsonOutputFile"], metrics)
             
         for colors in configuration["svgConfig"] :
+            stats_to_include = [
+                key.lower() for key in colors["include"]
+                ] if "include" in colors else stats
             image = generateBibliometricsImage(
                 metrics,
                 colors,
                 "Bibliometrics",
-                colors["include"] if "include" in colors else stats
+                stats_to_include
             )
             outputImage(image, colors["filename"])
