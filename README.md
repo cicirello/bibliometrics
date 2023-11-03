@@ -153,7 +153,7 @@ the g-index, e-index, R-index, and A-index:
         "e-index", 
         "r-index", 
         "a-index"
-	],
+    ],
     "svgConfig": [
         {
             "background": "#010409",
