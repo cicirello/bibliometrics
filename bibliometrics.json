@@ -1,12 +1,12 @@
 {
-    "A": "71.56",
-    "R": "42.30",
-    "e": "34.12",
-    "fiveYear": 364,
-    "g": 44,
-    "h": 25,
-    "i10": 33,
-    "i100": 3,
-    "most": 228,
-    "total": 2052
+    "a-index": "71.56",
+    "e-index": "34.12",
+    "five-year-cites": 364,
+    "g-index": 44,
+    "h-index": 25,
+    "i10-index": 33,
+    "i100-index": 3,
+    "most-cited": 228,
+    "r-index": "42.30",
+    "total-cites": 2052
 }

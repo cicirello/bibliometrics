@@ -82,45 +82,45 @@ class TestBibiometrics(unittest.TestCase) :
         with open("tests/testcase.html.txt", "r") as f :
             page = f.read().replace('\n', '')
             metrics = bib.parseBibliometrics(page)
-            self.assertEqual(2052, metrics["total"])
-            self.assertEqual(364, metrics["fiveYear"])
-            self.assertEqual(25, metrics["h"])
-            self.assertEqual(33, metrics["i10"])
-            self.assertEqual(44, metrics["g"])
-            self.assertEqual(228, metrics["most"])
-            self.assertEqual(3, metrics["i100"])
-            self.assertEqual("34.12", metrics["e"])
-            self.assertEqual("42.30", metrics["R"])
-            self.assertEqual("71.56", metrics["A"])
-            self.assertFalse("i1000" in metrics)
-            self.assertFalse("i10000" in metrics)
+            self.assertEqual(2052, metrics["total-cites"])
+            self.assertEqual(364, metrics["five-year-cites"])
+            self.assertEqual(25, metrics["h-index"])
+            self.assertEqual(33, metrics["i10-index"])
+            self.assertEqual(44, metrics["g-index"])
+            self.assertEqual(228, metrics["most-cited"])
+            self.assertEqual(3, metrics["i100-index"])
+            self.assertEqual("34.12", metrics["e-index"])
+            self.assertEqual("42.30", metrics["r-index"])
+            self.assertEqual("71.56", metrics["a-index"])
+            self.assertFalse("i1000-index" in metrics)
+            self.assertFalse("i10000-index" in metrics)
 
     def test_generate_image(self) :
         metrics = {
-            "total" : 2052,
-            "fiveYear" : 364,
-            "h" : 25,
-            "i10" : 33,
-            "i100" : 3,
-            "g" : 44,
-            "most" : 228,
-            "e" : "34.12",
-            "R" : "42.30",
-            "A" : "71.56"
+            "total-cites" : 2052,
+            "five-year-cites" : 364,
+            "h-index" : 25,
+            "i10-index" : 33,
+            "i100-index" : 3,
+            "g-index" : 44,
+            "most-cited" : 228,
+            "e-index" : "34.12",
+            "r-index" : "42.30",
+            "a-index" : "71.56"
         }
         stats = [
-            "total",
-            "fiveYear",
-            "most",
-            "h",
-            "g",
-            "i10",
-            "i100",
-            "i1000",
-            "i10000",
-            "e",
-            "R",
-            "A"
+            "total-cites",
+            "five-year-cites",
+            "most-cited",
+            "h-index",
+            "g-index",
+            "i10-index",
+            "i100-index",
+            "i1000-index",
+            "i10000-index",
+            "e-index",
+            "r-index",
+            "a-index"
         ]
         colors = {
             "title" : "#58a6ff",
