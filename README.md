@@ -146,13 +146,13 @@ the g-index, e-index, R-index, and A-index:
     "jsonOutputFile": "bibliometrics.json",
     "include": [
         "total-cites", 
-		"five-year-cites", 
-		"most-cited", 
-		"h-index", 
-		"g-index", 
-		"e-index", 
-		"r-index", 
-		"a-index"
+        "five-year-cites", 
+        "most-cited", 
+        "h-index", 
+        "g-index", 
+        "e-index", 
+        "r-index", 
+        "a-index"
 	],
     "svgConfig": [
         {
