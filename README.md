@@ -5,7 +5,7 @@
 | __PyPI Downloads__ | [![Downloads](https://pepy.tech/badge/bibliometrics)](https://pepy.tech/project/bibliometrics) [![Downloads/month](https://static.pepy.tech/personalized-badge/bibliometrics?period=month&units=international_system&left_color=grey&right_color=blue&left_text=monthly)](https://pepy.tech/project/bibliometrics) [![Downloads/week](https://static.pepy.tech/personalized-badge/bibliometrics?period=week&units=international_system&left_color=grey&right_color=blue&left_text=weekly)](https://pepy.tech/project/bibliometrics) |
 | __Build Status__ | [![build](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/build.yml) [![CodeQL](https://github.com/cicirello/bibliometrics/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cicirello/bibliometrics/actions/workflows/codeql-analysis.yml) |
 | __Security__ | [![Snyk security score](https://snyk-widget.herokuapp.com/badge/pip/bibliometrics/badge.svg)](https://snyk.io/vuln/pip%3Abibliometrics) |
-| __Source Info__ | [![License](https://img.shields.io/github/license/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics/blob/main/LICENSE) [![GitHub top language](https://img.shields.io/github/languages/top/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics) |
+| __Other Info__ | ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fcicirello%2Fbibliometrics%2Fmain%2Fpyproject.toml) [![License](https://img.shields.io/github/license/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics/blob/main/LICENSE) [![GitHub top language](https://img.shields.io/github/languages/top/cicirello/bibliometrics)](https://github.com/cicirello/bibliometrics) |
 | __Support__ | [![GitHub Sponsors](https://img.shields.io/badge/sponsor-30363D?logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/cicirello) [![Liberapay](https://img.shields.io/badge/Liberapay-F6C915?logo=liberapay&logoColor=black)](https://liberapay.com/cicirello) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?logo=ko-fi&logoColor=white)](https://ko-fi.com/cicirello) |
 
 This command line utility does the following:
@@ -13,7 +13,7 @@ This command line utility does the following:
 * parses from that page your total citations, your five-year citation count, your h-index, your i10-index, and the number of citations of your most-cited paper;
 * computes your g-index provided if it is less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
 * computes your i100-index, i1000-index, and i10000-index ([doi:10.1007/s11192-020-03831-9](https://doi.org/10.1007/s11192-020-03831-9)), hiding any that are 0, and provided they are less than 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
-* computes your e-index ([https://doi.org/10.1371/journal.pone.0005429](https://doi.org/10.1371/journal.pone.0005429)), your R-index ([https://doi.org/10.1007/s11434-007-0145-9](https://doi.org/10.1007/s11434-007-0145-9)), and your A-index provided that your h-index is at most 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
+* computes your e-index ([doi:10.1371/journal.pone.0005429](https://doi.org/10.1371/journal.pone.0005429)), your R-index ([doi:10.1007/s11434-007-0145-9](https://doi.org/10.1007/s11434-007-0145-9)), and your A-index provided that your h-index is at most 100 ([reason for limitation later](#respect-google-scholars-robotstxt));
 * generates a JSON file summarizing these bibliometrics;
 * generates one or more SVG images summarizing these bibliometrics; and
 * includes all bibliometrics that are non-zero by default, but enables user-configurable list of bibliometrics.
@@ -28,21 +28,55 @@ __Blog Post:__ [Your Citation Metrics in an SVG for Your Website](https://dev.to
 ## Table of Contents
 
 This README is organized as follows:
+* [Supported Bibliometrics](#supported-bibliometrics): list of the bibliometrics with
+  brief descriptions of what they are.
 * [Samples](#samples): provides examples of the output of this utility.
 * [Configuration](#configuration): explains how to configure the utility, such as colors for the SVG,
   file locations, etc.
 * [Configuring the Scholar ID](#configuring-the-scholar-id): explains the two ways of providing your
   Google Scholar ID to the utility.
 * [Usage](#usage): how to install and run.
-* [Respect Google Scholar's robots.txt](#respect-google-scholars-robotstxt): explains the relevant 
-  portions of Google Scholar's robots.txt as it relates to this, or any tool, designed to gather information 
-  from Scholar. Note that most other tools that provide more functionality (e.g., all of the ones I looked at before
-  implementing this) do not respect that robots.txt. If you wish to submit an issue or pull request requesting 
-  additional functionality, please know that any such request must be possible to implement without violating 
-  Scholar's robots.txt. Otherwise, the issue or pull request will be closed.
+* [Respect Google Scholar's robots.txt](#respect-google-scholars-robotstxt): explains 
+  the relevant portions of Google Scholar's robots.txt as it relates to this, or any 
+  tool, designed to gather information from Scholar. Note that most other tools that 
+  provide more functionality (e.g., all of the ones I looked at before implementing 
+  this) do not respect that robots.txt. If you wish to submit an issue or pull request 
+  requesting additional functionality, please know that any such request must be possible 
+  to implement without violating Scholar's robots.txt. Otherwise, the issue or pull request 
+  will be closed.
 * [Support the Project](#support-the-project): different ways that you can support the project.
 * [Contribute](#contribute): contribution guidelines.
 * [License](#license).
+
+## Supported Bibliometrics
+
+The bibliometrics utility computes the following bibliometrics:
+* Total citations: total number of citations to the researcher's publications.
+* Five-year citations: total citations within past 5 years.
+* Most-cited paper: number of citations to the researcher's most-cited paper.
+* [h-index](https://doi.org/10.1073/pnas.0507655102): the maximum h such that
+  the researcher's h most-cited papers have been cited at least h times each.
+* [g-index](https://doi.org/10.1007/s11192-006-0144-7): the maximum g such 
+  that the researcher's g most-cited papers have been cited an average of g 
+  times each.
+* [i10-index](https://doi.org/10.1007/s11192-020-03831-9): number of papers 
+  cited at least 10 times each.
+* [i100-index](https://doi.org/10.1007/s11192-020-03831-9): number of papers 
+  cited at least 100 times each.
+* [i1000-index](https://doi.org/10.1007/s11192-020-03831-9): number of papers 
+  cited at least 1000 times each.
+* [i10000-index](https://doi.org/10.1007/s11192-020-03831-9): number of papers 
+  cited at least 10000 times each.
+* Various bibliometrics intended to complement the h-index, providing additional
+  information about the researcher's h-core, where the h-core refers to the
+  h most-cited papers. These complementary bibliometrics include the following:
+  * [e-index](https://doi.org/10.1371/journal.pone.0005429): the square root of 
+    the excess citations to the papers in the h-core, where excess citations is 
+    defined as the total citations to the papers in the h-core minus $h^2$. 
+  * [R-index](https://doi.org/10.1007/s11434-007-0145-9): the square root of the
+    total citations to the papers in the researcher's h-core.
+  * A-index: the average number of citations to the papers in the researcher's h-core.
+
 
 ## Samples
 
