@@ -42,6 +42,15 @@ class TestBibiometrics(unittest.TestCase) :
             expected = 55 - (10-h)*(11-h)//2
             self.assertEqual(expected, bib.calculate_h_core_citations(cites, h))
 
+    def test_calculate_h_median(self):
+        cites = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        expected= [
+            10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6,
+            5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0]
+        for i in range(len(expected)):
+            h = i + 1
+            self.assertEqual(expected[i], bib.calculate_h_median(cites, h))
+            
     def test_calculate_g(self) :
         for g in range(1, 11) :
             cites = [10]*g
@@ -89,6 +98,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(44, metrics["g-index"])
             self.assertEqual(228, metrics["most-cited"])
             self.assertEqual(3, metrics["i100-index"])
+            self.assertEqual(48, metrics["h-median"])
             self.assertEqual("34.12", metrics["e-index"])
             self.assertEqual("42.30", metrics["r-index"])
             self.assertEqual("71.56", metrics["a-index"])
@@ -104,6 +114,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i100-index" : 3,
             "g-index" : 44,
             "most-cited" : 228,
+            "h-median" : 48,
             "e-index" : "34.12",
             "r-index" : "42.30",
             "a-index" : "71.56"
@@ -118,6 +129,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i100-index",
             "i1000-index",
             "i10000-index",
+            "h-median",
             "e-index",
             "r-index",
             "a-index"

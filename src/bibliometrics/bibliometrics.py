@@ -94,6 +94,7 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "i100-index" : "i100-index",
         "i1000-index" : "i1000-index",
         "i10000-index" : "i10000-index",
+        "h-median" : "h-median", 
         "e-index" : "e-index",
         "r-index" : "R-index",
         "a-index" : "A-index"
@@ -275,6 +276,10 @@ def parseBibliometrics(page) :
     g = calculate_g_index(cites_list)
     if g > 0 and g < 100 :
         metrics["g-index"] = g
+    h_median = calculate_h_median(cites_list, h) if h < 200 else 0
+    if h_median > 0.0:
+        metrics["h-median"] = h_median if (
+            isinstance(h_median, int)) else "{0:.1f}".format(h_median)
     h_core_sum = calculate_h_core_citations(cites_list, h) if h <= 100 else 0
     e = calculate_e_index(h_core_sum, h) if h <= 100 else 0
     if e > 0.0 :
@@ -297,6 +302,25 @@ def parseBibliometrics(page) :
         metrics["i10000-index"] = i10000
     
     return metrics
+
+def calculate_h_median(cites_list, h) :
+    """Calculates the median number of citations to publications in
+    the h-core, i.e., the h most-cited papers.
+
+    Keyword arguments:
+    cites_list - List of citations of papers in decreasing order.
+    h - The h-index.
+    """
+    if h % 2 == 0:
+        m1 = h // 2
+        if m1 >= len(cites_list):
+            return 0
+        m0 = m1 - 1
+        total = cites_list[m0] + cites_list[m1]
+        return total // 2 if total % 2 == 0 else total / 2
+    else:
+        m = h // 2
+        return cites_list[m] if m < len(cites_list) else 0
 
 def calculate_h_core_citations(cites_list, h) :
     """Calculates the total number of citations to the publications
@@ -477,6 +501,8 @@ def validateMetrics(metrics) :
         print("ERROR: Failed to parse i10-index.")
     if "g-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute g-index.")
+    if "h-median" not in metrics :
+        print("WARNING: Failed to parse data needed to compute h-median.")
     if "e-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute e-index.")
     if "r-index" not in metrics :
@@ -523,6 +549,7 @@ def main() :
         "i100-index",
         "i1000-index",
         "i10000-index",
+        "h-median",
         "e-index",
         "r-index",
         "a-index"
