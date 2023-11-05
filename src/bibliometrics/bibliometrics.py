@@ -437,12 +437,17 @@ def outputJSON(filename, metrics) :
     """
     # Create the directory if it doesn't exist.
     directoryName = os.path.dirname(filename)
+    converted_metrics = {
+        key : (
+            float(value) if isinstance(value, str) else value
+            ) for key, value in metrics.items()
+    }
     if len(directoryName) > 0 :
         os.makedirs(directoryName, exist_ok=True, mode=0o777)
     try:
         # Write the metrics to a json file
         with open(filename, "w") as jsonFile :
-            json.dump(metrics, jsonFile, indent=4, sort_keys=True)
+            json.dump(converted_metrics, jsonFile, indent=4, sort_keys=True)
     except IOError:
         print("Error: An error occurred while writing the metrics to a json file.")
         exit(1)
