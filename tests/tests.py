@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022-2023 Vincent A Cicirello
+# Copyright (c) 2022-2024 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
@@ -35,6 +35,13 @@ class TestBibiometrics(unittest.TestCase) :
     # To have tests generate sample images (to files),
     # change this to True.
     printSampleImage = False
+
+    def test_calculate_o_index(self):
+        self.assertEqual(42, bib.calculate_o_index(42, 42))
+        self.assertEqual(8, bib.calculate_o_index(1, 64))
+        self.assertEqual(8, bib.calculate_o_index(64, 1))
+        self.assertEqual(8, bib.calculate_o_index(2, 32))
+        self.assertEqual(8, bib.calculate_o_index(32, 2))
 
     def test_calculate_h_core_citations(self):
         cites = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
@@ -98,6 +105,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(44, metrics["g-index"])
             self.assertEqual(228, metrics["most-cited"])
             self.assertEqual(3, metrics["i100-index"])
+            self.assertEqual(75, metrics["o-index"])
             self.assertEqual(48, metrics["h-median"])
             self.assertEqual("34.12", metrics["e-index"])
             self.assertEqual("42.30", metrics["r-index"])
@@ -114,6 +122,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i100-index" : 3,
             "g-index" : 44,
             "most-cited" : 228,
+            "o-index" : 75,
             "h-median" : 48,
             "e-index" : "34.12",
             "r-index" : "42.30",
@@ -129,6 +138,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i100-index",
             "i1000-index",
             "i10000-index",
+            "o-index",
             "h-median",
             "e-index",
             "r-index",

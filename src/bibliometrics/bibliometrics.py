@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022-2023 Vincent A Cicirello
+# Copyright (c) 2022-2024 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
@@ -94,6 +94,7 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "i100-index" : "i100-index",
         "i1000-index" : "i1000-index",
         "i10000-index" : "i10000-index",
+        "o-index" : "o-index",
         "h-median" : "h-median", 
         "e-index" : "e-index",
         "r-index" : "R-index",
@@ -273,6 +274,8 @@ def parseBibliometrics(page) :
     most = cites_list[0]
     if most > 0 :
         metrics["most-cited"] = most
+        metrics["o-index"] = calculate_o_index(h, most)
+    
     g = calculate_g_index(cites_list)
     if g > 0 and g < 100 :
         metrics["g-index"] = g
@@ -302,6 +305,17 @@ def parseBibliometrics(page) :
         metrics["i10000-index"] = i10000
     
     return metrics
+
+def calculate_o_index(h, most):
+    """Calculates the o-index, which is the geometric mean
+    of the h-index and the number of citations to the most-cited
+    paper.
+
+    Keyword arguments:
+    h - the h-index
+    most - number of citations to most-cited paper
+    """
+    return round(math.sqrt(h * most))
 
 def calculate_h_median(cites_list, h) :
     """Calculates the median number of citations to publications in
@@ -516,6 +530,8 @@ def validateMetrics(metrics) :
         print("WARNING: Failed to parse data needed to compute A-index.")
     if "most-cited" not in metrics :
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
+    if "o-index" not in metrics:
+        print("WARNING: Failed to compute o-index, which should only occur in case of no citations.")
     if not valid :
         print("Exiting....")
         exit(1)
@@ -554,6 +570,7 @@ def main() :
         "i100-index",
         "i1000-index",
         "i10000-index",
+        "o-index",
         "h-median",
         "e-index",
         "r-index",
