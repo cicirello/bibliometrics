@@ -29,6 +29,7 @@ from datetime import date
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from .text_length import calculateTextLength, calculateTextLength110Weighted
+from .calculator import BibliometricCalculator
 
 template = """<svg width="{0}" height="{1}" viewBox="0 0 {0} {1}" xmlns="http://www.w3.org/2000/svg" lang="en" xml:lang="en">
 <rect x="{2}" y="{2}" stroke-width="{3}" rx="{4}" width="{5}" height="{6}" stroke="{7}" fill="{8}"/>
@@ -262,127 +263,11 @@ def parseBibliometrics(page) :
     Keyword arguments:
     page - The user profile page
     """
-    metrics = scrapePage(page)
-    if "h-index" not in metrics :
-        return metrics
-    h = metrics["h-index"]
-    cites_list = parse_cites_per_pub(page)
-    if len(cites_list) == 0 :
-        return metrics
-
-    cites_list.sort(reverse=True)
-    most = cites_list[0]
-    if most > 0 :
-        metrics["most-cited"] = most
-        metrics["o-index"] = calculate_o_index(h, most)
-    
-    g = calculate_g_index(cites_list)
-    if g > 0 and g < 100 :
-        metrics["g-index"] = g
-    h_median = calculate_h_median(cites_list, h) if h < 200 else 0
-    if h_median > 0.0:
-        metrics["h-median"] = h_median if (
-            isinstance(h_median, int)) else "{0:.1f}".format(h_median)
-    h_core_sum = calculate_h_core_citations(cites_list, h) if h <= 100 else 0
-    e = calculate_e_index(h_core_sum, h) if h <= 100 else 0
-    if e > 0.0 :
-        metrics["e-index"] = "{0:.2f}".format(e)
-    R = calculate_R_index(h_core_sum) if h <= 100 else 0
-    if R > 0.0 :
-        metrics["r-index"] = "{0:.2f}".format(R)
-    A = calculate_A_index(h_core_sum, h) if h <= 100 else 0
-    if A > 0.0 :
-        metrics["a-index"] = "{0:.2f}".format(A)
-
-    i100 = sum(1 for x in cites_list if x >= 100)
-    i1000 = sum(1 for x in cites_list if x >= 1000)
-    i10000 = sum(1 for x in cites_list if x >= 10000)
-    if i100 > 0 and i100 < 100 :
-        metrics["i100-index"] = i100
-    if i1000 > 0 and i1000 < 100 :
-        metrics["i1000-index"] = i1000
-    if i10000 > 0 and i10000 < 100 :
-        metrics["i10000-index"] = i10000
-    
-    return metrics
-
-def calculate_o_index(h, most):
-    """Calculates the o-index, which is the geometric mean
-    of the h-index and the number of citations to the most-cited
-    paper.
-
-    Keyword arguments:
-    h - the h-index
-    most - number of citations to most-cited paper
-    """
-    return round(math.sqrt(h * most))
-
-def calculate_h_median(cites_list, h) :
-    """Calculates the median number of citations to publications in
-    the h-core, i.e., the h most-cited papers.
-
-    Keyword arguments:
-    cites_list - List of citations of papers in decreasing order.
-    h - The h-index.
-    """
-    if h % 2 == 0:
-        m1 = h // 2
-        if m1 >= len(cites_list):
-            return 0
-        m0 = m1 - 1
-        total = cites_list[m0] + cites_list[m1]
-        return total // 2 if total % 2 == 0 else total / 2
-    else:
-        m = h // 2
-        return cites_list[m] if m < len(cites_list) else 0
-
-def calculate_h_core_citations(cites_list, h) :
-    """Calculates the total number of citations to the publications
-    in the h-core, i.e., the h most-cited papers.
-
-    Keyword arguments:
-    cites_list - List of citations of papers in decreasing order.
-    h - The h-index.
-    """
-    return sum(cites_list[i] for i in range(h))
-
-def calculate_g_index(cites_list) :
-    """Calculates the g-index.
-
-    Keyword arguments:
-    cites_list - List of citations of papers in decreasing order.
-    """
-    rolling_sum = [ cites_list[0] ]
-    for i in range(1, len(cites_list)) :
-        rolling_sum.append(cites_list[i] + rolling_sum[i-1])
-    rolling_sum = [ (i+1, x) for i, x in enumerate(rolling_sum) ]
-    return max(y for y, x in rolling_sum if x >= y*y)
-
-def calculate_R_index(h_core_sum) :
-    """Calculates the R-index.
-
-    Keyword arguments:
-    h_core_sum - sum of the citations to the h publications in the h-core.
-    """
-    return math.sqrt(h_core_sum)
-
-def calculate_A_index(h_core_sum, h) :
-    """Calculates the A-index.
-
-    Keyword arguments:
-    h_core_sum - sum of the citations to the h publications in the h-core.
-    h - The h-index.
-    """
-    return h_core_sum / h if h > 0 else 0
-    
-def calculate_e_index(h_core_sum, h) :
-    """Calculates the e-index.
-
-    Keyword arguments:
-    h_core_sum - sum of the citations to the h publications in the h-core.
-    h - The h-index.
-    """
-    return math.sqrt(h_core_sum - h*h)
+    calc = BibliometricCalculator(
+        scrapePage(page),
+        parse_cites_per_pub(page)
+    )
+    return calc.to_dict()
     
 def parse_cites_per_pub(page) :
     """Parses the cites per publication for calculating g-index,
