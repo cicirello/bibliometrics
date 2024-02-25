@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 * Calculation of o-index
+* Calculation of w-index
   
 ### Changed
 * Refactored bibliometric calculations for improved maintainability

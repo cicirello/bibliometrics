@@ -95,6 +95,7 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "i100-index" : "i100-index",
         "i1000-index" : "i1000-index",
         "i10000-index" : "i10000-index",
+        "w-index" : "w-index", 
         "o-index" : "o-index",
         "h-median" : "h-median", 
         "e-index" : "e-index",
@@ -386,39 +387,41 @@ def getScholarProfilePage(profileID) :
         print("Exiting....")
         exit(1)
 
-def validateMetrics(metrics) :
+def validateMetrics(metrics):
     """Checks for parsing errors.
 
     Keyword arguments:
     metrics - The parsed and computed bibliometrics
     """
     valid = True
-    if "total-cites" not in metrics :
+    if "total-cites" not in metrics:
         valid = False
         print("ERROR: Failed to parse total citations.")
-    if "five-year-cites" not in metrics :
+    if "five-year-cites" not in metrics:
         valid = False
         print("ERROR: Failed to parse five-year citations.")
-    if "h-index" not in metrics :
+    if "h-index" not in metrics:
         valid = False
         print("ERROR: Failed to parse h-index.")
-    if "i10-index" not in metrics :
+    if "i10-index" not in metrics:
         valid = False
         print("ERROR: Failed to parse i10-index.")
     if "g-index" not in metrics :
         print("WARNING: Failed to parse data needed to compute g-index.")
-    if "h-median" not in metrics :
+    if "h-median" not in metrics:
         print("WARNING: Failed to parse data needed to compute h-median.")
-    if "e-index" not in metrics :
+    if "e-index" not in metrics:
         print("WARNING: Failed to parse data needed to compute e-index.")
-    if "r-index" not in metrics :
+    if "r-index" not in metrics:
         print("WARNING: Failed to parse data needed to compute R-index.")
-    if "a-index" not in metrics :
+    if "a-index" not in metrics:
         print("WARNING: Failed to parse data needed to compute A-index.")
-    if "most-cited" not in metrics :
+    if "most-cited" not in metrics:
         print("WARNING: Failed to parse data needed to compute most-cited paper.")
+    if "w-index" not in metrics:
+        print("WARNING: Failed to parse data needed to compute w-index.")
     if "o-index" not in metrics:
-        print("WARNING: Failed to compute o-index, which should only occur in case of no citations.")
+        print("WARNING: Failed to parse data needed to compute o-index.")
     if not valid :
         print("Exiting....")
         exit(1)

@@ -60,6 +60,17 @@ class TestBibiometrics(unittest.TestCase) :
         calc = BibliometricCalculator(metrics, [5, 20, 9])
         self.assertEqual(20, calc._metrics["most-cited"])
 
+    def test_calculate_w_index(self):
+        metrics = {
+            "total-cites" : 4200,
+            "five-year-cites" : 6,
+            "h-index" : 10,
+            "i10-index" : 1
+        }
+        cites = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 4, 3, 2, 1 ]
+        calc = BibliometricCalculator(metrics, cites)
+        self.assertEqual(5, calc._metrics["w-index"])
+
     def test_calculate_o_index(self):
         metrics = {
             "total-cites" : 4200,
@@ -232,6 +243,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(3, metrics["i100-index"])
             self.assertEqual(75, metrics["o-index"])
             self.assertEqual(48, metrics["h-median"])
+            self.assertEqual(8, metrics["w-index"])
             self.assertEqual("34.12", metrics["e-index"])
             self.assertEqual("42.30", metrics["r-index"])
             self.assertEqual("71.56", metrics["a-index"])
@@ -248,6 +260,7 @@ class TestBibiometrics(unittest.TestCase) :
             "g-index" : 44,
             "most-cited" : 228,
             "o-index" : 75,
+            "w-index" : 8,
             "h-median" : 48,
             "e-index" : "34.12",
             "r-index" : "42.30",
@@ -263,6 +276,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i100-index",
             "i1000-index",
             "i10000-index",
+            "w-index",
             "o-index",
             "h-median",
             "e-index",
