@@ -267,7 +267,9 @@ def parseBibliometrics(page) :
         scrapePage(page),
         parse_cites_per_pub(page)
     )
-    return calc.to_dict()
+    metrics = calc.to_dict()
+    validateMetrics(metrics)
+    return metrics
     
 def parse_cites_per_pub(page) :
     """Parses the cites per publication for calculating g-index,
@@ -442,8 +444,7 @@ def main() :
     page = getScholarProfilePage(scholarID)
 
     metrics = parseBibliometrics(page)
-    validateMetrics(metrics)
-
+    
     # default metrics in default order
     stats = [
         "total-cites",
