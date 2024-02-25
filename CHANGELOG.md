@@ -7,11 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2024-02-25
 
 ### Added
-* Calculation of o-index
-* Calculation of w-index
   
 ### Changed
-* Refactored bibliometric calculations for improved maintainability
 
 ### Deprecated
 
@@ -20,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### CI/CD
+
+
+## [3.1.0] - 2024-02-25
+
+### Added
+* Calculation of o-index
+* Calculation of w-index
+  
+### Changed
+* Refactored bibliometric calculations for improved maintainability
 
 
 ## [3.0.0] - 2023-11-05
