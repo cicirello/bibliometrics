@@ -459,6 +459,7 @@ def main() :
         "i100-index",
         "i1000-index",
         "i10000-index",
+        "w-index",
         "o-index",
         "h-median",
         "e-index",
