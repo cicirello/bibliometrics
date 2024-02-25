@@ -29,7 +29,7 @@ import math
 class BibliometricCalculator:
     """Calculates the various bibliometrics."""
 
-    __slots__ = [ '_metrics']
+    __slots__ = [ '_metrics' ]
 
     def __init__(self, metrics, cites_list):
         """Initializes the BibliometricCalculator.
@@ -148,9 +148,7 @@ class BibliometricCalculator:
         Keyword arguments:
         h_core_sum - sum of the citations to the h publications in the h-core.
         """
-        if self._metrics["h-index"] > 100:
-            return
-        r = math.sqrt(h_core_sum)
+        r = math.sqrt(h_core_sum) if self._metrics["h-index"] <= 100 else 0
         if r > 0.0 :
             self._metrics["r-index"] = "{0:.2f}".format(r)
 
@@ -161,9 +159,7 @@ class BibliometricCalculator:
         h_core_sum - sum of the citations to the h publications in the h-core.
         """
         h = self._metrics["h-index"]
-        if h > 100 or h <= 0:
-            return
-        a = h_core_sum / h
+        a = h_core_sum / h if h > 0 and h <= 100 else 0
         if a > 0.0 :
             self._metrics["a-index"] = "{0:.2f}".format(a)
 
@@ -176,5 +172,4 @@ class BibliometricCalculator:
         """
         ixx = sum(1 for y in sorted_cites if y >= xx)
         if ixx > 0 and ixx < 100:
-            self._metrics["i{}-index".format(xx)] = ixx
-
+            self._metrics["i{0}-index".format(xx)] = ixx
