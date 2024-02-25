@@ -41,6 +41,7 @@ keywords = [
     "scientometrics",
     "SVG",
     "SVG generation",
+    "w-index",
 ]
 
 [project.urls]

@@ -55,6 +55,7 @@ class BibliometricCalculator:
         self._calculate_ixx_index(sorted_cites, 100)
         self._calculate_ixx_index(sorted_cites, 1000)
         self._calculate_ixx_index(sorted_cites, 10000)
+        self._calculate_w_index(sorted_cites)
 
     def to_dict(self):
         """Returns a dict of the bibliometrics."""
@@ -173,3 +174,14 @@ class BibliometricCalculator:
         ixx = sum(1 for y in sorted_cites if y >= xx)
         if ixx > 0 and ixx < 100:
             self._metrics["i{0}-index".format(xx)] = ixx
+
+    def _calculate_w_index(self, sorted_cites):
+        """Calculates the w-index.
+
+        Keyword arguments:
+        sorted_cites - List of citations of papers in decreasing order.
+        """
+        w = sum(1 for i, c in enumerate(sorted_cites) if c >= 10*(i+1))
+        if w > 0 and w < 100:
+            self._metrics["w-index"] = w
+
