@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### CI/CD
 
 
+## [3.1.1] - 2024-02-25
+
+### Fixed
+* Fixed missing w-index in SVG
+
+
 ## [3.1.0] - 2024-02-25
 
 ### Added
