@@ -1,5 +1,6 @@
 {
     "jsonOutputFile": "bibliometrics.json",
+    "firstPubYear": 1999,
     "svgConfig": [
         {
             "background": "#010409",

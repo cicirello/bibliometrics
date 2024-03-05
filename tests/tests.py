@@ -35,7 +35,7 @@ class TestBibiometrics(unittest.TestCase) :
 
     # To have tests generate sample images (to files),
     # change this to True.
-    printSampleImage = False
+    printSampleImage = True #False
 
     def test_calculator_retains_scraped(self):
         metrics = {
@@ -44,9 +44,9 @@ class TestBibiometrics(unittest.TestCase) :
             "h-index" : 3,
             "i10-index" : 1
         }
-        calc = BibliometricCalculator(metrics, [])
+        calc = BibliometricCalculator(metrics, [], None)
         self.assertEqual(metrics, calc._metrics)
-        calc = BibliometricCalculator(metrics, [5, 20, 9])
+        calc = BibliometricCalculator(metrics, [5, 20, 9], None)
         for key, value in metrics.items():
             self.assertEqual(value, calc._metrics[key])
 
@@ -57,7 +57,7 @@ class TestBibiometrics(unittest.TestCase) :
             "h-index" : 3,
             "i10-index" : 1
         }
-        calc = BibliometricCalculator(metrics, [5, 20, 9])
+        calc = BibliometricCalculator(metrics, [5, 20, 9], None)
         self.assertEqual(20, calc._metrics["most-cited"])
 
     def test_calculate_w_index(self):
@@ -68,7 +68,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i10-index" : 1
         }
         cites = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 4, 3, 2, 1 ]
-        calc = BibliometricCalculator(metrics, cites)
+        calc = BibliometricCalculator(metrics, cites, None)
         self.assertEqual(5, calc._metrics["w-index"])
 
     def test_calculate_o_index(self):
@@ -78,13 +78,21 @@ class TestBibiometrics(unittest.TestCase) :
             "h-index" : 42,
             "i10-index" : 1
         }
-        self.assertEqual(42, BibliometricCalculator(metrics, [42]*42)._metrics["o-index"])
+        self.assertEqual(
+            42,
+            BibliometricCalculator(metrics, [42]*42, None)._metrics["o-index"])
         metrics["h-index"] = 1
-        self.assertEqual(8, BibliometricCalculator(metrics, [5, 20, 64])._metrics["o-index"])
+        self.assertEqual(
+            8,
+            BibliometricCalculator(metrics, [5, 20, 64], None)._metrics["o-index"])
         metrics["h-index"] = 2
-        self.assertEqual(8, BibliometricCalculator(metrics, [5, 20, 32])._metrics["o-index"])
+        self.assertEqual(
+            8,
+            BibliometricCalculator(metrics, [5, 20, 32], None)._metrics["o-index"])
         metrics["h-index"] = 0
-        self.assertEqual(0, BibliometricCalculator(metrics, [1, 0, 2])._metrics["o-index"])
+        self.assertEqual(
+            0,
+            BibliometricCalculator(metrics, [1, 0, 2], None)._metrics["o-index"])
 
     def test_calculate_g(self) :
         metrics = {
@@ -95,10 +103,14 @@ class TestBibiometrics(unittest.TestCase) :
         }
         for g in range(1, 11) :
             cites = [10]*g
-            self.assertEqual(g, BibliometricCalculator(metrics, cites)._metrics["g-index"])
+            self.assertEqual(
+                g,
+                BibliometricCalculator(metrics, cites, None)._metrics["g-index"])
         for g in range(11, 21) :
             cites = [10]*g
-            self.assertEqual(10, BibliometricCalculator(metrics, cites)._metrics["g-index"])        
+            self.assertEqual(
+                10,
+                BibliometricCalculator(metrics, cites, None)._metrics["g-index"])        
 
     def test_calculate_h_median(self):
         metrics = {
@@ -114,13 +126,18 @@ class TestBibiometrics(unittest.TestCase) :
         for i in range(len(expected)):
             metrics["h-index"] = i + 1
             if expected[i] > 0:
-                h_median = BibliometricCalculator(metrics, cites)._metrics["h-median"]
+                h_median = BibliometricCalculator(
+                    metrics,
+                    cites,
+                    None)._metrics["h-median"]
                 self.assertEqual(
                     expected[i],
                     float(h_median) if isinstance(h_median, str) else h_median
                 )
             else:
-                self.assertFalse("h-median" in BibliometricCalculator(metrics, cites)._metrics)
+                self.assertFalse(
+                    "h-median" in BibliometricCalculator(
+                        metrics, cites, None)._metrics)
     
     def test_calculate_h_core_citations(self):
         metrics = {
@@ -135,7 +152,10 @@ class TestBibiometrics(unittest.TestCase) :
             expected = 10 * (55 - (10-h)*(11-h)//2)
             self.assertEqual(
                 expected,
-                BibliometricCalculator(metrics, cites)._calculate_h_core_citations(cites)
+                BibliometricCalculator(
+                    metrics,
+                    cites,
+                    None)._calculate_h_core_citations(cites)
             )
 
     def test_calculate_e_no_excess(self):
@@ -148,7 +168,11 @@ class TestBibiometrics(unittest.TestCase) :
         for h in range(0, 10) :
             metrics["h-index"] = h
             cites = [h]*20
-            self.assertFalse("e-index" in BibliometricCalculator(metrics, cites)._metrics)
+            self.assertFalse(
+                "e-index" in BibliometricCalculator(
+                    metrics,
+                    cites,
+                    None)._metrics)
             
     def test_calculate_e_equal_excess(self) :
         metrics = {
@@ -162,7 +186,8 @@ class TestBibiometrics(unittest.TestCase) :
             cites = [h+5]*h + [1]*5
             self.assertAlmostEqual(
                 math.sqrt(5*h),
-                float(BibliometricCalculator(metrics, cites)._metrics["e-index"]),
+                float(BibliometricCalculator(
+                    metrics, cites, None)._metrics["e-index"]),
                 places=2
             )
 
@@ -178,7 +203,8 @@ class TestBibiometrics(unittest.TestCase) :
             cites = [h+x for x in range(h, 0, -1)]
             self.assertAlmostEqual(
                 math.sqrt(h*(h+1)/2),
-                float(BibliometricCalculator(metrics, cites)._metrics["e-index"]),
+                float(BibliometricCalculator(
+                    metrics, cites, None)._metrics["e-index"]),
                 places=2
             )
 
@@ -196,7 +222,8 @@ class TestBibiometrics(unittest.TestCase) :
             cites = [h_core_sum] + [0]*5
             self.assertEqual(
                 expected,
-                float(BibliometricCalculator(metrics, cites)._metrics["r-index"])
+                float(BibliometricCalculator(
+                    metrics, cites, None)._metrics["r-index"])
             )
 
     def test_calculate_A_index(self):
@@ -214,7 +241,8 @@ class TestBibiometrics(unittest.TestCase) :
             cites = [h_core_sum // h]*h + [0]*5
             self.assertEqual(
                 expected,
-                float(BibliometricCalculator(metrics, cites)._metrics["a-index"])
+                float(BibliometricCalculator(
+                    metrics, cites, None)._metrics["a-index"])
             )
 
     def test_calculate_ixx_index(self):
@@ -225,7 +253,7 @@ class TestBibiometrics(unittest.TestCase) :
             "i10-index" : 1
         }
         cites = [10001, 10000, 1002, 1001, 1000, 103, 102, 101, 100, 5, 4, 3, 2, 1]
-        calc = BibliometricCalculator(metrics, cites)
+        calc = BibliometricCalculator(metrics, cites, None)
         self.assertEqual(2, calc._metrics["i10000-index"])
         self.assertEqual(5, calc._metrics["i1000-index"])
         self.assertEqual(9, calc._metrics["i100-index"])
@@ -233,7 +261,7 @@ class TestBibiometrics(unittest.TestCase) :
     def test_parse(self) :
         with open("tests/testcase.html.txt", "r") as f :
             page = f.read().replace('\n', '')
-            metrics = bib.parseBibliometrics(page)
+            metrics = bib.parseBibliometrics(page, None)
             self.assertEqual(2052, metrics["total-cites"])
             self.assertEqual(364, metrics["five-year-cites"])
             self.assertEqual(25, metrics["h-index"])
@@ -244,6 +272,24 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertEqual(75, metrics["o-index"])
             self.assertEqual(48, metrics["h-median"])
             self.assertEqual(8, metrics["w-index"])
+            self.assertEqual("34.12", metrics["e-index"])
+            self.assertEqual("42.30", metrics["r-index"])
+            self.assertEqual("71.56", metrics["a-index"])
+            self.assertFalse("i1000-index" in metrics)
+            self.assertFalse("i10000-index" in metrics)
+            self.assertFalse("m-quotient" in metrics)
+            metrics = bib.parseBibliometrics(page, 1999)
+            self.assertEqual(2052, metrics["total-cites"])
+            self.assertEqual(364, metrics["five-year-cites"])
+            self.assertEqual(25, metrics["h-index"])
+            self.assertEqual(33, metrics["i10-index"])
+            self.assertEqual(44, metrics["g-index"])
+            self.assertEqual(228, metrics["most-cited"])
+            self.assertEqual(3, metrics["i100-index"])
+            self.assertEqual(75, metrics["o-index"])
+            self.assertEqual(48, metrics["h-median"])
+            self.assertEqual(8, metrics["w-index"])
+            self.assertEqual("1.00", metrics["m-quotient"])
             self.assertEqual("34.12", metrics["e-index"])
             self.assertEqual("42.30", metrics["r-index"])
             self.assertEqual("71.56", metrics["a-index"])
@@ -264,13 +310,15 @@ class TestBibiometrics(unittest.TestCase) :
             "h-median" : 48,
             "e-index" : "34.12",
             "r-index" : "42.30",
-            "a-index" : "71.56"
+            "a-index" : "71.56",
+            "m-quotient" : "1.00"
         }
         stats = [
             "total-cites",
             "five-year-cites",
             "most-cited",
             "h-index",
+            "m-quotient",
             "g-index",
             "i10-index",
             "i100-index",
