@@ -21,7 +21,7 @@ classifiers = [
     "Topic :: Multimedia :: Graphics",
 ]
 keywords = [
-    "A-index",
+    "a-index",
     "bibliometrics",
     "e-index",
     "g-index",
@@ -36,7 +36,7 @@ keywords = [
     "o-index",
     "publications",
     "researcher",
-    "R-index",
+    "r-index",
     "scholar",
     "scientometrics",
     "SVG",
