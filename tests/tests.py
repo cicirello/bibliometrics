@@ -27,6 +27,7 @@
 import unittest
 
 import sys, math
+from datetime import datetime
 sys.path.insert(0,'src')
 import bibliometrics.bibliometrics as bib
 from bibliometrics.calculator import BibliometricCalculator
@@ -36,6 +37,22 @@ class TestBibiometrics(unittest.TestCase) :
     # To have tests generate sample images (to files),
     # change this to True.
     printSampleImage = False
+
+    def test_calculator_m_quotient(self):
+        metrics = {
+            "total-cites" : 42,
+            "five-year-cites" : 6,
+            "h-index" : 24,
+            "i10-index" : 1
+        }
+        elapsed_years = [ 1, 2, 4, 8, 16]
+        expected = ["24.00", "12.00", "6.00", "3.00", "1.50"]
+        for n, e in zip(elapsed_years, expected):
+            year = datetime.now().year - n
+            calc = BibliometricCalculator(metrics, [], year)
+            self.assertEqual(e, calc._metrics["m-quotient"])
+        calc = BibliometricCalculator(metrics, [], datetime.now().year)
+        self.assertFalse("m-quotient" in calc._metrics)
 
     def test_calculator_retains_scraped(self):
         metrics = {
@@ -278,7 +295,7 @@ class TestBibiometrics(unittest.TestCase) :
             self.assertFalse("i1000-index" in metrics)
             self.assertFalse("i10000-index" in metrics)
             self.assertFalse("m-quotient" in metrics)
-            metrics = bib.parseBibliometrics(page, 1999)
+            metrics = bib.parseBibliometrics(page, datetime.now().year - 25)
             self.assertEqual(2052, metrics["total-cites"])
             self.assertEqual(364, metrics["five-year-cites"])
             self.assertEqual(25, metrics["h-index"])

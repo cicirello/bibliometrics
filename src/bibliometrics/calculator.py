@@ -43,7 +43,10 @@ class BibliometricCalculator:
             from profile)
         """
         self._metrics = dict(metrics)
-        if "h-index" not in self._metrics or len(cites_list) == 0:
+        if "h-index" not in self._metrics:
+            return
+        self._calulate_m_quotient(year)
+        if len(cites_list) == 0:
             return
         sorted_cites = sorted(cites_list, reverse=True)
         if sorted_cites[0] <= 0:
@@ -60,7 +63,6 @@ class BibliometricCalculator:
         self._calculate_ixx_index(sorted_cites, 1000)
         self._calculate_ixx_index(sorted_cites, 10000)
         self._calculate_w_index(sorted_cites)
-        self._calulate_m_quotient(year)
 
     def to_dict(self):
         """Returns a dict of the bibliometrics."""
