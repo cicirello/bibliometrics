@@ -25,21 +25,28 @@
 #
 
 import math
+from datetime import datetime
 
 class BibliometricCalculator:
     """Calculates the various bibliometrics."""
 
     __slots__ = [ '_metrics' ]
 
-    def __init__(self, metrics, cites_list):
+    def __init__(self, metrics, cites_list, year):
         """Initializes the BibliometricCalculator.
 
         Keyword arguments:
         metrics - a dict of the metrics scraped directly from Scholar profile
         cites_list - a list of the citations of articles scraped from profile
+        year - The year of the first publication, which will be None if user
+            didn't provide in the configuration (i.e., this is not scraped
+            from profile)
         """
         self._metrics = dict(metrics)
-        if "h-index" not in self._metrics or len(cites_list) == 0:
+        if "h-index" not in self._metrics:
+            return
+        self._calulate_m_quotient(year)
+        if len(cites_list) == 0:
             return
         sorted_cites = sorted(cites_list, reverse=True)
         if sorted_cites[0] <= 0:
@@ -184,4 +191,17 @@ class BibliometricCalculator:
         w = sum(1 for i, c in enumerate(sorted_cites) if c >= 10*(i+1))
         if w > 0 and w < 100:
             self._metrics["w-index"] = w
+
+    def _calulate_m_quotient(self, year):
+        """Calculates the m-quotient if the user provded the year of
+        first publication in the configuration.
+
+        Keyword arguments:
+        year - the year of first publication or None if not provided
+        """
+        if year:
+            n = datetime.now().year - year
+            m = self._metrics["h-index"] / n if n > 0 else 0
+            if m > 0:
+                self._metrics["m-quotient"] = "{0:.2f}".format(m)
 

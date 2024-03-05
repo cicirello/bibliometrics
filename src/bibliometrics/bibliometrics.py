@@ -90,6 +90,7 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "five-year-cites" : "Five-year citations",
         "most-cited" : "Most-cited paper",
         "h-index" : "h-index",
+        "m-quotient" : "m-quotient",
         "g-index" : "g-index",
         "i10-index" : "i10-index",
         "i100-index" : "i100-index",
@@ -258,15 +259,19 @@ def scrapePage(page) :
     metrics["i10-index"] = int(i10.strip())
     return metrics
     
-def parseBibliometrics(page) :
+def parseBibliometrics(page, year) :
     """Parses a Scholar Profile for the bibliometrics.
 
     Keyword arguments:
     page - The user profile page
+    year - The year of the first publication, which will be None if user
+        didn't provide in the configuration (i.e., this is not scraped
+        from profile)
     """
     calc = BibliometricCalculator(
         scrapePage(page),
-        parse_cites_per_pub(page)
+        parse_cites_per_pub(page),
+        year
     )
     metrics = calc.to_dict()
     validateMetrics(metrics)
@@ -446,7 +451,10 @@ def main() :
 
     page = getScholarProfilePage(scholarID)
 
-    metrics = parseBibliometrics(page)
+    metrics = parseBibliometrics(
+        page,
+        configuration["firstPubYear"] if "firstPubYear" in configuration else None
+    )
     
     # default metrics in default order
     stats = [
@@ -462,6 +470,7 @@ def main() :
         "w-index",
         "o-index",
         "h-median",
+        "m-quotient",
         "e-index",
         "r-index",
         "a-index"
