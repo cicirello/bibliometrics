@@ -99,8 +99,8 @@ def generateBibliometricsImage(metrics, colors, titleText, stats) :
         "o-index" : "o-index",
         "h-median" : "h-median", 
         "e-index" : "e-index",
-        "r-index" : "R-index",
-        "a-index" : "A-index"
+        "r-index" : "r-index",
+        "a-index" : "a-index"
     }
 
     lastUpdatedText = "Last updated: " + date.today().strftime("%d %B %Y")
