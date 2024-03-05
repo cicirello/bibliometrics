@@ -35,7 +35,7 @@ class TestBibiometrics(unittest.TestCase) :
 
     # To have tests generate sample images (to files),
     # change this to True.
-    printSampleImage = True #False
+    printSampleImage = False
 
     def test_calculator_retains_scraped(self):
         metrics = {
@@ -318,7 +318,6 @@ class TestBibiometrics(unittest.TestCase) :
             "five-year-cites",
             "most-cited",
             "h-index",
-            "m-quotient",
             "g-index",
             "i10-index",
             "i100-index",
@@ -327,6 +326,7 @@ class TestBibiometrics(unittest.TestCase) :
             "w-index",
             "o-index",
             "h-median",
+            "m-quotient",
             "e-index",
             "r-index",
             "a-index"

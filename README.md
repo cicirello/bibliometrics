@@ -141,7 +141,7 @@ field. The bibliometrics utility does not attempt to scrape this from your Schol
 To change the order that the bibliometrics appear in the SVG, or to explicitly exclude one or more
 bibliometrics, you can use the `"include"` field. This field is an array of keys associated with the
 various bibliometrics. If this field is not present, then the following default order is 
-used: `[ "total-cites", "five-year-cites", "most-cited", "h-index", "m-quotient", "g-index", "i10-index", "i100-index", "i1000-index", "i10000-index", "w-index", "o-index", "h-median", "e-index", "r-index", "a-index" ]`. There is no
+used: `[ "total-cites", "five-year-cites", "most-cited", "h-index", "g-index", "i10-index", "i100-index", "i1000-index", "i10000-index", "w-index", "o-index", "h-median", "m-quotient", "e-index", "r-index", "a-index" ]`. There is no
 reason to use this field if the only thing you want to do is to exclude bibliometrics that have the
 value 0. Such bibliometrics will be excluded by default. The list of keys for the bibliometrics to
 include is case-insensitive.

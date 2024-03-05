@@ -462,7 +462,6 @@ def main() :
         "five-year-cites",
         "most-cited",
         "h-index",
-        "m-quotient",
         "g-index",
         "i10-index",
         "i100-index",
@@ -471,6 +470,7 @@ def main() :
         "w-index",
         "o-index",
         "h-median",
+        "m-quotient",
         "e-index",
         "r-index",
         "a-index"
