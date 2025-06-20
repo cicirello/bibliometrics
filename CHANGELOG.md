@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2025-06-20
 
 ### Added
-* Option to configure the user-agent string for the request that downloads your Scholar profile
   
 ### Changed
 
@@ -16,9 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
-* Sets a default user-agent
 
 ### CI/CD
+
+
+## [3.3.0] - 2025-06-20
+
+### Added
+* Option to configure the user-agent string for the request that downloads your Scholar profile
+
+### Fixed
+* Sets a default user-agent
 
 
 ## [3.2.0] - 2024-03-05
