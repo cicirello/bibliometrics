@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022-2024 Vincent A Cicirello
+# Copyright (c) 2022-2025 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
@@ -26,7 +26,7 @@
 
 import sys, math, os, json
 from datetime import date
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 from urllib.error import HTTPError
 from .text_length import calculateTextLength, calculateTextLength110Weighted
 from .calculator import BibliometricCalculator
@@ -374,7 +374,7 @@ def readPreviousBibliometrics(filename) :
             return None
     return None
 
-def getScholarProfilePage(profileID) :
+def getScholarProfilePage(profileID, user_agent='Mozilla/5.0') :
     """Gets the Scholar profile page.
 
     Keyword arguments:
@@ -382,7 +382,7 @@ def getScholarProfilePage(profileID) :
     """
     url = urlTemplate.format(profileID)
     try :
-        with urlopen(url) as response :
+        with urlopen(Request(url, headers={'User-Agent' : user_agent})) as response :
             return response.read().decode(response.headers.get_content_charset())
     except HTTPError as e:
         print("ERROR: Failed to retrieve the profile page!")
@@ -449,7 +449,12 @@ def main() :
         print("Exiting....")
         exit(1)
 
-    page = getScholarProfilePage(scholarID)
+    user_agent = os.environ["USER_AGENT_BIB"] if (
+        "USER_AGENT_BIB" in os.environ) else (
+            configuration["userAgent"] if (
+                "userAgent" in configuration) else 'Mozilla/5.0')
+
+    page = getScholarProfilePage(scholarID, user_agent)
 
     metrics = parseBibliometrics(
         page,

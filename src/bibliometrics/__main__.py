@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022-2024 Vincent A Cicirello
+# Copyright (c) 2022-2025 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
@@ -28,7 +28,7 @@ from .bibliometrics import main
 
 if __name__ == "__main__" :
     print("bibliometrics: Summarize your Google Scholar bibliometrics in an SVG")
-    print("Copyright (C) 2022-2024 Vincent A. Cicirello (https://www.cicirello.org/)")
+    print("Copyright (C) 2022-2025 Vincent A. Cicirello (https://www.cicirello.org/)")
     print("MIT License: https://github.com/cicirello/bibliometrics/blob/main/LICENSE")
     print()
     main()
