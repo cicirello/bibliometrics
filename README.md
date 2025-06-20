@@ -236,6 +236,34 @@ won't be calculated:
 }
 ```
 
+You also have the option to configure the user-agent string for the request
+that downloads your Scholar profile. To do so, use the `userAgent` field, such
+as in the example below.
+
+```JSON
+{
+    "jsonOutputFile": "bibliometrics.json",
+    "firstPubYear": 1999,
+    "userAgent": "Mozilla/5.0",
+    "svgConfig": [
+        {
+            "background": "#010409",
+            "border": "rgba(56,139,253,0.4)",
+            "filename": "images/bibliometrics2.svg",
+            "text": "#c9d1d9",
+            "title": "#58a6ff"
+        },
+        {
+            "background": "#f6f8fa",
+            "border": "rgba(84,174,255,0.4)",
+            "filename": "images/bibliometrics.svg",
+            "text": "#24292f",
+            "title": "#0969da"
+        }
+    ]
+}
+```
+
 ## Configuring the Scholar ID
 
 There are two ways to provide your Google Scholar ID to the utility:
