@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
   
 ### Changed
+* Bumped minimum-supported Python version to 3.10. Note that this may still work with earlier versions of Python. However, we are eliminating support for versions of Python that have reached end-of-life.
 
 ### Deprecated
 
