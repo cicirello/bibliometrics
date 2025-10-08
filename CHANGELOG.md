@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2025-06-20
+## [Unreleased] - 2025-10-08
 
 ### Added
   
 ### Changed
+* Bumped minimum-supported Python version to 3.10. Note that this may still work with earlier versions of Python. However, we are eliminating support for versions of Python that have reached end-of-life.
 
 ### Deprecated
 
