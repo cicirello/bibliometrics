@@ -4,12 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2025-10-08
+## [Unreleased] - 2025-10-11
 
 ### Added
   
 ### Changed
-* Bumped minimum-supported Python version to 3.10. Note that this may still work with earlier versions of Python. However, we are eliminating support for versions of Python that have reached end-of-life.
 
 ### Deprecated
 
@@ -18,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### CI/CD
+
+
+## [4.0.0] - 2025-10-11
+
+### Changed
+* Minimum-supported Python version is now 3.10. We are eliminating support for versions of Python that have reached end-of-life, which includes 3.8 and 3.9. At the time of this release, bibliometrics works correctly with Python 3.8 and above. But, we have removed Python 3.8 and 3.9 from our matrix tests.
+* Development now uses Python 3.14, matrix testing Python versions 3.10 through 3.14.
 
 
 ## [3.3.0] - 2025-06-20
