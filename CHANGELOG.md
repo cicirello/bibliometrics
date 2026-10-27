@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2025-10-11
+## [Unreleased] - 2026-10-27
 
 ### Added
   
 ### Changed
+* Minimum-supported Python version is now 3.11. We are dropping support for Python 3.10 as it has reached end-of-life.
 
 ### Deprecated
 
@@ -17,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### CI/CD
+* Python 3.10 removed from matrix tests.
+* Python 3.15 added to matrix tests.
+* PyPI publishing now runs on Python 3.15.
 
 
 ## [4.0.0] - 2025-10-11

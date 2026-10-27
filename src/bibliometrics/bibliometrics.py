@@ -1,6 +1,6 @@
 # bibliometrics: Summarize your Google Scholar bibliometrics in an SVG
 # 
-# Copyright (c) 2022-2025 Vincent A Cicirello
+# Copyright (c) 2022-2026 Vincent A Cicirello
 # https://www.cicirello.org/
 #
 # MIT License
