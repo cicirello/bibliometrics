@@ -9,13 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
   
 ### Changed
-* Minimum-supported Python version is now 3.11. We are dropping support for Python 3.10 as it has reached end-of-life.
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+### CI/CD
+
+
+## [4.1.0] - 2026-10-27
+
+### Changed
+* Minimum-supported Python version is now 3.11. We are dropping support for Python 3.10 as it has reached end-of-life.
 
 ### CI/CD
 * Python 3.10 removed from matrix tests.
